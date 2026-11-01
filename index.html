@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#173f35">
+  <meta name="description" content="Attention — Tangxun Math, a focused space to discover and practise mathematics questions.">
+  <title>Attention — 汤逊数学</title>
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="main.js"></script>
+</head>
+<body>
+  <!-- Intro / first-visit story -->
+  <section id="intro-screen" class="intro-screen" aria-label="Introduction">
+    <div class="intro-topline">
+      <img class="intro-brand-logo" src="assets/logo.png" alt="Attention logo">
+      <div class="intro-brand-copy">
+        <span class="intro-brand-cn">汤逊数学</span>
+        <span class="intro-brand-en">ATTENTION</span>
+      </div>
+      <span class="intro-edition">A SPACE FOR MATHEMATICAL THINKING</span>
+    </div>
+
+    <main class="intro-center">
+      <p id="story-kicker" class="story-kicker">01 — THE FIRST STEP</p>
+      <h1 id="story-title" class="story-title">Every great idea begins with a question.</h1>
+      <p id="story-body" class="story-body" aria-live="polite"></p>
+      <div id="story-progress" class="story-progress" aria-label="Introduction progress">
+        <span class="progress-dot is-active"></span>
+        <span class="progress-dot"></span>
+        <span class="progress-dot"></span>
+      </div>
+    </main>
+
+    <button id="intro-skip" class="intro-skip" type="button">Skip introduction <span aria-hidden="true">↗</span></button>
+    <div class="intro-bottom-center">
+      <button id="story-next" class="button button-primary intro-next" type="button" hidden>Continue <span aria-hidden="true">→</span></button>
+    </div>
+    <div class="intro-index">01 <span>/</span> 03</div>
+  </section>
+
+  <!-- Main application -->
+  <div id="app-shell" class="app-shell" hidden>
+    <header class="topbar">
+      <div class="brand-area">
+        <div class="logo-frame" title="Upload your website logo">
+          <div id="logo-fallback" class="logo-fallback" aria-hidden="true">A.</div>
+          <img id="brand-logo" class="brand-logo" alt="Attention logo" hidden>
+          <button id="logo-upload-trigger" class="logo-upload-trigger" type="button" aria-label="Upload website logo" title="Upload your logo">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5M5 14.5v4A1.5 1.5 0 0 0 6.5 20h11a1.5 1.5 0 0 0 1.5-1.5v-4"/></svg>
+          </button>
+          <input id="logo-file-input" type="file" accept="image/*" hidden>
+        </div>
+        <div class="brand-text">
+          <div class="brand-line"><span class="brand-cn">汤逊数学</span><span class="brand-divider"></span><span class="brand-name">ATTENTION</span></div>
+          <span class="brand-caption">A MATHEMATICS QUESTION SPACE</span>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <span class="online-indicator"><i></i> YOUR STUDY SPACE</span>
+      </div>
+    </header>
+
+    <div class="workspace">
+      <aside class="sidebar">
+        <div class="sidebar-main">
+          <p class="sidebar-eyebrow">YOUR NEXT STEP</p>
+          <h2>Make every question count.</h2>
+          <p class="sidebar-hint">Want to find questions that fit you? Sign in to save your interests and build your own study space.</p>
+          <div class="sidebar-rule"></div>
+          <div class="sidebar-note">
+            <span class="note-icon" aria-hidden="true">✳</span>
+            <p>Curiosity grows when you give it your attention.</p>
+          </div>
+        </div>
+
+        <div id="sidebar-guest" class="sidebar-account">
+          <div class="account-prompt">
+            <span class="account-avatar" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7 8a7 7 0 0 1 14 0"/></svg></span>
+            <span><strong>New to Attention?</strong><small>Your account starts here.</small></span>
+          </div>
+          <button id="open-auth" class="button button-dark button-wide" type="button">Log in / Register <span aria-hidden="true">↗</span></button>
+        </div>
+
+        <div id="sidebar-user" class="sidebar-account" hidden>
+          <div class="signed-in-label"><i></i> SIGNED IN</div>
+          <div class="account-prompt">
+            <span class="account-avatar account-avatar-user" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7 8a7 7 0 0 1 14 0"/></svg></span>
+            <span><strong id="account-name">Student</strong><small id="account-role">Member</small></span>
+          </div>
+          <button id="open-dashboard" class="button button-dark button-wide" type="button">Personal dashboard <span aria-hidden="true">↗</span></button>
+          <button id="logout-button" class="text-button logout-button" type="button">Log out</button>
+        </div>
+        <div class="sidebar-footer">ATTENTION <span>•</span> VERSION 0.5</div>
+      </aside>
+
+      <main class="main-content">
+        <div class="main-inner">
+          <div class="main-heading-row">
+            <div>
+              <p class="section-eyebrow">THE QUESTION LIBRARY</p>
+              <h1>Find your next challenge<span class="heading-period">.</span></h1>
+              <p class="main-subtitle">A place for questions, ideas, and better ways to think.</p>
+            </div>
+            <div class="heading-mark" aria-hidden="true"><span>∑</span></div>
+          </div>
+
+          <section class="topic-filter-section" aria-labelledby="topic-filter-heading">
+            <div class="filter-heading-row">
+              <p id="topic-filter-heading" class="section-eyebrow">BROWSE BY TOPIC</p>
+              <div class="filter-tools">
+                <details class="filter-help">
+                  <summary aria-label="Access and difficulty guide" title="Access and difficulty guide">?</summary>
+                  <div class="filter-help-panel">
+                    <strong>Question access</strong>
+                    <p>All question statements are open to visitors.</p>
+                    <strong>Answers & explanations</strong>
+                    <p><b>1–2 stars</b> — everyone can answer and read the explanation.</p>
+                    <p><b>3–4 stars</b> — sign in to answer and unlock the answer and explanation.</p>
+                    <p><b>5 stars</b> — REG can see the answer; VIP can also read the explanation.</p>
+                    <p><b>6–7 stars</b> — REG receives correctness feedback only; VIP can see the answer and explanation.</p>
+                    <strong>Attempt limits</strong>
+                    <p>4–6 stars: two attempts per question. 7 stars: one attempt. Other levels have no fixed attempt limit.</p>
+                  </div>
+                </details>
+                <button id="clear-filters" class="clear-filters" type="button">Clear filters</button>
+              </div>
+            </div>
+            <div id="topic-filters" class="topic-filters" aria-label="Mathematics topic filters">
+              <button class="topic-chip is-active" type="button" data-topic="all" aria-pressed="true">All topics</button>
+            </div>
+          </section>
+
+          <form id="search-form" class="search-panel" role="search">
+            <span class="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.5 4.5"/></svg></span>
+            <input id="search-input" type="search" name="q" autocomplete="off" placeholder="Search topics, concepts, or question keywords..." aria-label="Search mathematics questions">
+            <button class="search-button" type="submit">Search <span aria-hidden="true">↗</span></button>
+          </form>
+          <div class="secondary-filters" aria-label="Additional filters">
+            <label>Access
+              <select id="access-filter">
+                <option value="all">All access levels</option>
+                <option value="normal">Normal</option>
+                <option value="acc">ACC</option>
+                <option value="vip">VIP</option>
+              </select>
+            </label>
+            <label>Difficulty
+              <select id="difficulty-filter">
+                <option value="all">All difficulties</option>
+                <option value="1">1 star</option><option value="2">2 stars</option>
+                <option value="3">3 stars</option><option value="4">4 stars</option>
+                <option value="5">5 stars</option><option value="6">6 stars</option>
+                <option value="7">7 stars</option>
+              </select>
+            </label>
+          </div>
+          <p id="search-feedback" class="search-feedback" role="status" aria-live="polite"></p>
+
+          <section class="library-section" aria-labelledby="library-title">
+            <div class="library-heading">
+              <div>
+                <p class="section-eyebrow">START EXPLORING</p>
+                <h2 id="library-title">Your question library</h2>
+              </div>
+              <span id="library-count" class="library-count">0 QUESTIONS</span>
+            </div>
+
+            <div id="question-grid" class="question-grid" aria-live="polite"></div>
+            <div id="empty-library" class="empty-library" hidden>
+              <div class="empty-art" aria-hidden="true">
+                <div class="empty-orbit orbit-one"></div>
+                <div class="empty-orbit orbit-two"></div>
+                <span class="empty-sigma">∑</span>
+                <span class="empty-spark spark-one">✳</span>
+                <span class="empty-spark spark-two">·</span>
+              </div>
+              <h3 id="empty-title">No questions match these filters.</h3>
+              <p id="empty-description">Try another topic or clear the filters.</p>
+              <span class="empty-status"><i></i> KEEP EXPLORING</span>
+            </div>
+          </section>
+
+          <footer class="main-footer"><span>汤逊数学 · ATTENTION</span><span>THINK CLEARLY. KEEP EXPLORING.</span></footer>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Login and registration modal -->
+  <section id="auth-modal" class="modal-backdrop" hidden aria-labelledby="auth-heading" aria-modal="true" role="dialog">
+    <div class="modal-card auth-card">
+      <button class="modal-close" id="auth-close" type="button" aria-label="Close">×</button>
+      <div class="modal-brand-mark" aria-hidden="true">A.</div>
+      <p class="section-eyebrow">WELCOME TO ATTENTION</p>
+      <h2 id="auth-heading">Your space starts here.</h2>
+      <p class="modal-intro">Sign in to continue, or create an account to choose the mathematics you enjoy.</p>
+
+      <div class="auth-tabs" role="tablist" aria-label="Account access">
+        <button id="auth-tab-login" class="auth-tab is-active" type="button" role="tab" aria-selected="true">Log in</button>
+        <button id="auth-tab-register" class="auth-tab" type="button" role="tab" aria-selected="false">Register</button>
+      </div>
+
+      <form id="login-form" class="auth-form" novalidate>
+        <label for="login-identifier">Username or email</label>
+        <input id="login-identifier" name="identifier" type="text" autocomplete="username" placeholder="Enter your username or email" required>
+        <label for="login-password">Password</label>
+        <input id="login-password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required>
+        <button class="button button-primary button-wide form-submit" type="submit">Log in <span aria-hidden="true">→</span></button>
+      </form>
+
+      <form id="register-form" class="auth-form" hidden novalidate>
+        <label for="register-username">Username</label>
+        <input id="register-username" name="username" type="text" autocomplete="username" minlength="3" maxlength="24" placeholder="Choose a username" required>
+        <p class="field-hint">3–24 characters: letters, numbers, _ or -</p>
+        <label for="register-password">Password</label>
+        <input id="register-password" name="password" type="password" autocomplete="new-password" placeholder="Create a password" required>
+        <p class="field-hint">Enter your password once. No confirmation field is needed.</p>
+        <label for="register-email">Email <span class="optional-label">OPTIONAL</span></label>
+        <input id="register-email" name="email" type="email" autocomplete="email" placeholder="name@example.com (optional)">
+        <button class="button button-primary button-wide form-submit" type="submit">Create account <span aria-hidden="true">→</span></button>
+      </form>
+      <p id="auth-message" class="form-message" role="status" aria-live="polite"></p>
+      <p class="privacy-note">This prototype stores account data in this browser only. Do not use a password you rely on elsewhere.</p>
+    </div>
+  </section>
+
+  <!-- New-member interest selection -->
+  <section id="preferences-modal" class="modal-backdrop" hidden aria-labelledby="preferences-heading" aria-modal="true" role="dialog">
+    <div class="modal-card preferences-card">
+      <button class="modal-close" id="preferences-close" type="button" aria-label="Close">×</button>
+      <p class="section-eyebrow">MAKE IT YOURS · 01</p>
+      <h2 id="preferences-heading">What kind of mathematics do you enjoy?</h2>
+      <p class="modal-intro">Choose a few interests. You can change them as your curiosity grows.</p>
+      <div id="interest-grid" class="interest-grid"></div>
+      <p id="preferences-message" class="form-message" role="status" aria-live="polite"></p>
+      <div class="preferences-actions">
+        <button id="preferences-skip" class="text-button" type="button">Do this later</button>
+        <button id="preferences-save" class="button button-primary" type="button">Save interests <span aria-hidden="true">→</span></button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Full-screen question detail. Questions are rendered as selectable text, not screenshots. -->
+  <section id="question-modal" class="modal-backdrop question-backdrop" hidden aria-labelledby="question-detail-title" aria-modal="true" role="dialog">
+    <article class="question-detail-card">
+      <button class="modal-close question-close-fixed" id="question-close" type="button" aria-label="Close question">×</button>
+      <div class="question-detail-topline">
+        <p class="section-eyebrow">QUESTION WORKSPACE</p>
+        <div id="detail-meta" class="detail-meta"></div>
+      </div>
+      <p id="question-detail-code" class="question-detail-code">Q</p>
+      <h2 id="question-detail-title">Question title</h2>
+      <p id="question-detail-description" class="question-detail-description"></p>
+      <div class="detail-topics" id="detail-topics"></div>
+
+      <section class="question-content-section" aria-label="Question statement">
+        <div id="question-statement" class="question-statement"></div>
+        <div id="question-diagram" class="question-diagram" hidden></div>
+        <div id="question-choices" class="question-choices" hidden></div>
+        <span class="ai-guidance-note">Independent practice exercise. An AI assistant should guide the learner with concepts or hints rather than provide a completed solution.</span>
+      </section>
+
+      <div class="question-detail-footer">
+        <span>Source</span>
+        <strong id="question-detail-source">—</strong>
+        <span class="solution-tier-label">Answer access: <b id="question-answer-tier">Public</b></span>
+      </div>
+
+      <section class="answer-section" aria-labelledby="answer-heading">
+        <div class="answer-section-heading">
+          <div>
+            <p class="section-eyebrow">YOUR ANSWER</p>
+            <h3 id="answer-heading">Choose one option</h3>
+          </div>
+          <span class="answer-private-label">A–E · One answer only</span>
+        </div>
+        <div id="answer-guest-state" class="answer-guest-state" hidden>
+          <p id="answer-gate-message">Sign in to answer this question.</p>
+          <button id="question-login-button" class="button button-dark" type="button">Log in to answer <span aria-hidden="true">→</span></button>
+        </div>
+        <form id="answer-form" class="answer-form" hidden>
+          <fieldset class="answer-options-fieldset">
+            <legend>Select exactly one answer:</legend>
+            <div id="answer-option-list" class="answer-option-list"></div>
+          </fieldset>
+          <div class="answer-form-footer">
+            <p id="answer-feedback" class="answer-feedback" role="status" aria-live="polite"></p>
+            <button class="button button-primary" type="submit">Submit answer <span aria-hidden="true">✓</span></button>
+          </div>
+        </form>
+        <p id="answer-attempt-status" class="answer-attempt-status" role="status" aria-live="polite"></p>
+      </section>
+
+      <section class="solution-section" aria-labelledby="solution-heading">
+        <div class="answer-section-heading">
+          <div>
+            <p class="section-eyebrow">OFFICIAL SOLUTION</p>
+            <h3 id="solution-heading">Answer & explanation</h3>
+          </div>
+          <span class="answer-private-label">Membership access</span>
+        </div>
+        <div id="solution-locked" class="solution-locked"></div>
+        <div id="solution-unlocked" class="solution-unlocked" hidden>
+          <p id="solution-correct-label" class="solution-correct-label"></p>
+          <p id="solution-explanation" class="solution-explanation"></p>
+          <p id="solution-detail-locked" class="solution-detail-locked" hidden></p>
+        </div>
+      </section>
+
+      <div class="question-detail-actions">
+        <button id="question-detail-done" class="button button-primary detail-done" type="button">Back to question library</button>
+      </div>
+    </article>
+  </section>
+
+  <!-- Personal dashboard placeholder -->
+  <section id="dashboard-modal" class="modal-backdrop" hidden aria-labelledby="dashboard-heading" aria-modal="true" role="dialog">
+    <div class="modal-card dashboard-card">
+      <button class="modal-close" id="dashboard-close" type="button" aria-label="Close">×</button>
+      <p class="section-eyebrow">YOUR PERSONAL SPACE</p>
+      <h2 id="dashboard-heading">Personal dashboard</h2>
+      <div class="dashboard-empty-icon" aria-hidden="true">⌁</div>
+      <h3>Nothing here just yet.</h3>
+      <p class="modal-intro">Your dashboard is being prepared. Saved questions and personal progress can live here in a future version.</p>
+      <button id="dashboard-done" class="button button-primary button-wide" type="button">Back to Attention</button>
+    </div>
+  </section>
+</body>
+</html>

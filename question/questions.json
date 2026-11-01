@@ -1,0 +1,998 @@
+{
+  "version": 5,
+  "questions": [
+    {
+      "id": "rectangle-perpendicular-distance-001",
+      "code": "SH-01",
+      "title": "A Perpendicular Distance in a Rectangle",
+      "description": "A moving point creates a perpendicular distance to a fixed vertex. Identify the function and its valid domain.",
+      "topics": [
+        "Geometry",
+        "Coordinate Geometry",
+        "Functions",
+        "Distance"
+      ],
+      "accessTier": "normal",
+      "difficulty": 3,
+      "source": "上海空中课堂",
+      "answerTier": "reg",
+      "diagram": "rectangle-moving-point",
+      "prompt": "In rectangle ABCD, AB = 3 and BC = 6. Point P moves along side BC, excluding the endpoints B and C. From D, draw DQ perpendicular to AP, meeting AP at Q.\n\nLet AP = x and DQ = y. Which option gives the function y in terms of x and the range of x?",
+      "choices": [
+        "y = 18/x, with 3 < x < 3√5",
+        "y = 18/x, with 3 ≤ x ≤ 3√5",
+        "y = 18/x, with 0 < x < 6",
+        "y = 9/x, with 3 < x < 3√5",
+        "y = 18/(x − 3), with 3 < x < 3√5"
+      ],
+      "correctIndex": 0,
+      "explanation": "Set B = (0,0), A = (0,3), D = (6,3), and P = (t,0), where 0 < t < 6. The length AP is x = √(t² + 9). The perpendicular distance from D to line AP is the magnitude of the 2D cross product of AP and AD divided by |AP|: y = |(t,−3) × (6,0)|/x = 18/x. Since 0 < t < 6, we have 3 < x < √45 = 3√5. Both endpoints are excluded because P cannot equal B or C.",
+      "submissionTier": "reg",
+      "explanationTier": "reg",
+      "maxAttempts": null
+    },
+    {
+      "id": "clmc2026-b2-exponential-equation",
+      "code": "B2′",
+      "title": "An Exponential Equation",
+      "description": "Use an exponential substitution to find a power from the unique real solution of an equation.",
+      "topics": [
+        "Algebra",
+        "Exponents",
+        "Equations",
+        "Functions"
+      ],
+      "accessTier": "normal",
+      "difficulty": 2,
+      "source": "CLMC2026-B2 Adapted",
+      "answerTier": "public",
+      "prompt": "There is one real value of x for which 4ˣ − 2ˣ⁺³ = 20. What is the value of 8ˣ?",
+      "choices": [
+        "80",
+        "100",
+        "512",
+        "1000",
+        "1728"
+      ],
+      "correctIndex": 3,
+      "explanation": "Let u = 2ˣ > 0. Then 4ˣ − 2ˣ⁺³ = 20 becomes u² − 8u = 20, so (u − 10)(u + 2) = 0. Since u > 0, u = 10. Therefore 8ˣ = (2ˣ)³ = 10³ = 1000.",
+      "submissionTier": "public",
+      "explanationTier": "public",
+      "maxAttempts": null
+    },
+    {
+      "id": "clmc2026-b3-line-parabola",
+      "code": "B3′",
+      "title": "A Line and a Parabola",
+      "description": "Use the intersection points of a line and a parabola, together with a chord length, to determine an integer.",
+      "topics": [
+        "Algebra",
+        "Coordinate Geometry",
+        "Quadratics",
+        "Geometry"
+      ],
+      "accessTier": "normal",
+      "difficulty": 3,
+      "source": "CLMC2026-B3 Adapted",
+      "answerTier": "reg",
+      "prompt": "Let k be a 2-digit positive integer. The line y = 2x + k intersects the parabola y = x² at points A and B. If the distance AB is 10√5, what is the sum of the digits of k?",
+      "choices": [
+        "3",
+        "5",
+        "6",
+        "7",
+        "9"
+      ],
+      "correctIndex": 2,
+      "explanation": "At an intersection, x² = 2x + k, so the two x-coordinates are 1 ± √(k+1). Their horizontal separation is 2√(k+1), and their vertical separation is twice that. Thus AB = √(20(k+1)) = 2√5√(k+1). Setting this equal to 10√5 gives k+1=25, so k=24 and its digit sum is 6.",
+      "submissionTier": "reg",
+      "explanationTier": "reg",
+      "maxAttempts": null
+    },
+    {
+      "id": "clmc2026-b4-even-row-products",
+      "code": "B4′",
+      "title": "A Probability Grid",
+      "description": "Count arrangements in a 3 × 3 grid in which every row has an even product.",
+      "topics": [
+        "Probability",
+        "Combinatorics",
+        "Number Theory"
+      ],
+      "accessTier": "normal",
+      "difficulty": 4,
+      "source": "CLMC2026-B4 Adapted",
+      "answerTier": "reg",
+      "prompt": "Consider a 3 by 3 array of cells. If we randomly place the numbers 1, 2, 3, …, 9 into this array (one number in each cell), what is the probability that the product of the numbers in each row is an even number?",
+      "choices": [
+        "1/2",
+        "4/7",
+        "9/14",
+        "5/7",
+        "11/14"
+      ],
+      "correctIndex": 2,
+      "explanation": "A row product is even exactly when that row contains at least one of the four even numbers. Choose the four positions occupied by even numbers among the nine cells. By inclusion–exclusion, the number of choices meeting all three rows is C(9,4) − 3C(6,4) = 126 − 45 = 81. All C(9,4)=126 position sets are equally likely, so the probability is 81/126 = 9/14.",
+      "submissionTier": "reg",
+      "explanationTier": "reg",
+      "maxAttempts": 2
+    },
+    {
+      "id": "clmc2026-b5-quartic-minimum",
+      "code": "B5′",
+      "title": "The Minimum of a Quartic Function",
+      "description": "Find the global minimum of a fourth-degree polynomial by recognizing its symmetry.",
+      "topics": [
+        "Algebra",
+        "Functions",
+        "Optimization",
+        "Polynomials"
+      ],
+      "accessTier": "normal",
+      "difficulty": 4,
+      "source": "CLMC2026-B5 Adapted",
+      "answerTier": "reg",
+      "prompt": "Let f(x) = x(x + 2)(x + 5)(x + 7). Over all real values of x, what is the minimum possible value of f(x)?",
+      "choices": [
+        "−49",
+        "−35",
+        "−25",
+        "−24",
+        "0"
+      ],
+      "correctIndex": 2,
+      "explanation": "Let t = x + 7/2 and u = t² ≥ 0. Then x(x+7) = u − 49/4 and (x+2)(x+5) = u − 9/4. Hence f(x) = (u−49/4)(u−9/4), a quadratic in u with its minimum at u = (49/4+9/4)/2 = 29/4. The two factors are then −5 and 5, giving the minimum −25.",
+      "submissionTier": "reg",
+      "explanationTier": "reg",
+      "maxAttempts": 2
+    },
+    {
+      "id": "clmc2026-c1-quadratic-sums",
+      "code": "C1′",
+      "title": "A Quadratic Sequence and Its Partial Sums",
+      "description": "Reconstruct a quadratic function from three values, then find the first partial sum that exceeds a large threshold.",
+      "topics": [
+        "Algebra",
+        "Sequences",
+        "Functions",
+        "Summation"
+      ],
+      "accessTier": "normal",
+      "difficulty": 5,
+      "source": "CLMC2026-C1 Adapted",
+      "answerTier": "reg",
+      "prompt": "Let f(x) = ax² + bx + c be the quadratic function for which f(1) = 61, f(2) = 91, and f(3) = 127. For each positive integer n, define S(n) = f(1) + f(2) + … + f(n). For example, S(3) = 61 + 91 + 127 = 279. What is the smallest integer n for which S(n) > 2,000,000?",
+      "choices": [
+        "120",
+        "121",
+        "122",
+        "123",
+        "124"
+      ],
+      "correctIndex": 2,
+      "explanation": "The second differences of 61, 91, 127 are 6, so a=3. Substitution gives b=21 and c=37; hence f(k)=3k²+21k+37. Summing gives S(n)=n(n²+12n+48). S(121)=1,953,061, while S(122)=2,000,312, so the smallest n with S(n)>2,000,000 is 122.",
+      "submissionTier": "reg",
+      "explanationTier": "vip",
+      "maxAttempts": 2
+    },
+    {
+      "id": "clmc2026-c2-last-two-digits",
+      "code": "C2′",
+      "title": "The Last Two Digits of a Power Sum",
+      "description": "Use modular arithmetic and repeating exponent patterns to determine the final two digits of a sum.",
+      "topics": [
+        "Number Theory",
+        "Modular Arithmetic",
+        "Exponents"
+      ],
+      "accessTier": "normal",
+      "difficulty": 4,
+      "source": "CLMC2026-C2 Adapted",
+      "answerTier": "reg",
+      "prompt": "Let S = 4²⁰³⁰ + 0²⁰³⁰ + 5²⁰³⁰ + 7²⁰³⁰. What are the last two digits of S?",
+      "choices": [
+        "30",
+        "50",
+        "51",
+        "78",
+        "90"
+      ],
+      "correctIndex": 1,
+      "explanation": "Work modulo 100. The powers repeat: 4¹⁰ ≡ 76 (mod 100), so 4²⁰³⁰ ≡ 76; 0²⁰³⁰ ≡ 0; 5²⁰³⁰ ≡ 25; and 7²⁰³⁰ ≡ 49 because the powers of 7 have period 20 modulo 100. Their sum is 76+0+25+49=150, whose last two digits are 50.",
+      "submissionTier": "reg",
+      "explanationTier": "reg",
+      "maxAttempts": 2
+    },
+    {
+      "id": "clmc2026-c3-equilateral-coordinate-triangle",
+      "code": "C3′",
+      "title": "An Equilateral Triangle in the Coordinate Plane",
+      "description": "Use equal distances between three coordinate points to determine the area of an equilateral triangle.",
+      "topics": [
+        "Geometry",
+        "Coordinate Geometry",
+        "Algebra"
+      ],
+      "accessTier": "normal",
+      "difficulty": 5,
+      "source": "CLMC2026-C3 Adapted",
+      "answerTier": "reg",
+      "prompt": "Let p and q be positive real numbers. The points (0, 0), (p, 3), and (1, q) form an equilateral triangle. The area of this triangle is A square units. What is A, rounded to the nearest integer?",
+      "choices": [
+        "8",
+        "18",
+        "22",
+        "26",
+        "30"
+      ],
+      "correctIndex": 3,
+      "explanation": "The vector from (0,0) to (p,3) must rotate by 60° counterclockwise to reach (1,q), because the clockwise option would give p<0. Thus 1 = p/2 − 3√3/2, so p=2+3√3. The squared side length is p²+9 = 40+12√3. The equilateral-triangle area is (√3/4)(40+12√3)=9+10√3≈26.32, which rounds to 26.",
+      "submissionTier": "reg",
+      "explanationTier": "vip",
+      "maxAttempts": 2
+    },
+    {
+      "id": "clmc2026-c4-multiplicative-magic-square",
+      "code": "C4′",
+      "title": "A Multiplicative Magic Square",
+      "description": "Investigate a multiplicative 3 × 3 magic square with nine distinct positive integers under a fixed upper bound.",
+      "topics": [
+        "Number Theory",
+        "Combinatorics",
+        "Optimization",
+        "Algebra"
+      ],
+      "accessTier": "normal",
+      "difficulty": 6,
+      "source": "CLMC2026-C4 Adapted",
+      "answerTier": "vip",
+      "prompt": "Consider a 3 by 3 grid where each entry is a positive integer. The product of each row, each column, and each of the two diagonals is equal to the same constant P. Let T be the sum of these nine numbers. If the grid consists of nine different positive integers, each less than 100, what is the smallest possible value of T/∛P, rounded to two decimal places?",
+      "choices": [
+        "10.25",
+        "10.79",
+        "11.08",
+        "13.72",
+        "15.17"
+      ],
+      "correctIndex": 1,
+      "explanation": "Write the square as [a b c; d e f; g h i] and let the common line product be P. Dividing the product of the top and bottom row products by the middle-column product, then using the equal opposite-pair products implied by the diagonals and middle row/column, gives P=e³; each opposite pair has product e². A finite exact search over integer entries 1–99 then yields the minimum at [12 36 32; 64 24 9; 18 16 48]. Every row, column, and diagonal has product 13,824=24³; the entries are distinct; T=259; and T/∛P=259/24≈10.7917, which rounds to 10.79. The exhaustive search enumerates the centre e and the top-left/top-middle entries, derives the remaining entries from the line-product constraints, and rejects non-integral, repeated, or ≥100 entries.",
+      "submissionTier": "reg",
+      "explanationTier": "vip",
+      "maxAttempts": 2
+    },
+    {
+      "id": "clmc2026-c5-cyclic-hexagon",
+      "code": "C5′",
+      "title": "A Cyclic Hexagon with Integer Chords",
+      "description": "Use cyclic geometry and integer chord-length constraints to minimize a sum of two diagonals.",
+      "topics": [
+        "Geometry",
+        "Euclidean Geometry",
+        "Number Theory",
+        "Optimization"
+      ],
+      "accessTier": "normal",
+      "difficulty": 7,
+      "source": "CLMC2026-C5 Adapted",
+      "answerTier": "vip",
+      "prompt": "Hexagon PQRSTU is inscribed in a circle. This hexagon has the property that PQ = QR = RS and ST = TU = UP. Given that PQ, PR, PS, PT, and PU all have integer side lengths, what is the minimum possible value of PS + QT?",
+      "choices": [
+        "360",
+        "376",
+        "392",
+        "752",
+        "1504"
+      ],
+      "correctIndex": 3,
+      "explanation": "Let α be the central angle subtending each of PQ, QR, RS and β the angle subtending each of ST, TU, UP. Then α+β=120°. Put t=α/2, a=PQ and e=PU. Using the sine rule for chords gives QT=a+e and n²=a²+ae+e², where n=√3R. The other required integer chords are PR=a(2a+e)/n, PT=e(2a+e)/n, and PS=3ae(a+e)/n². Since PR is an integer, n is rational and therefore an integer. If PS+QT<752, then a+e≤751. Checking all positive integer pairs with a+e≤751 against these exact-square and divisibility conditions gives no valid pair. The first feasible pair is (a,e,n)=(147,245,343), for which PR=231, PT=385, PS=360, and QT=392. Thus the minimum is 360+392=752.",
+      "submissionTier": "reg",
+      "explanationTier": "vip",
+      "maxAttempts": 1
+    },
+    {
+      "id": "amc8-2025-adapted-q1-star-area",
+      "code": "AMC 8 · Q1",
+      "title": "The Area of an Eight-Pointed Star",
+      "description": "Find the fraction of a square grid covered by the union of a diamond and an inner square.",
+      "topics": [
+        "Geometry",
+        "Area",
+        "Plane Geometry"
+      ],
+      "difficulty": 2,
+      "source": "AMC 8 2025 (adapted)",
+      "prompt": "On an 8-by-8 grid of unit squares (corners at (0,0) and (8,8)), an eight-pointed star is made by joining two shapes: the diamond with corners (4,0), (8,4), (4,8), (0,4), and the square with corners (1,1), (7,1), (7,7), (1,7). What percent of the grid is covered by the star?",
+      "choices": [
+        "50",
+        "56.25",
+        "62.5",
+        "68.75",
+        "75"
+      ],
+      "correctIndex": 2,
+      "explanation": "The 8×8 grid has area 64. The diamond has area 32 and the square has area 36. The part of the diamond outside the square consists of four congruent corner triangles. Each triangle has base 2 and height 1, so each has area 1 and the total area of the four parts is 4. Thus the overlap is 32−4=28, and the union (the eight-pointed star) has area 32+36−28=40. The percentage is 40/64×100%=62.5%.",
+      "accessTier": "normal",
+      "answerTier": "public",
+      "submissionTier": "public",
+      "explanationTier": "public",
+      "maxAttempts": null
+    },
+    {
+      "id": "amc8-2025-adapted-q2-symbols",
+      "code": "AMC 8 · Q2",
+      "title": "A Number Written with Repeated Symbols",
+      "description": "Use powers of seven and a minimum-symbol representation.",
+      "topics": [
+        "Number Theory",
+        "Powers",
+        "Greedy Representation"
+      ],
+      "difficulty": 3,
+      "source": "AMC 8 2025 (adapted)",
+      "prompt": "An ancient system uses five symbols worth 1, 7, 49, 343 and 2401. A number is written by repeating symbols and adding their values. The number 10 000 is written using the fewest possible symbols. How many symbols are used?",
+      "choices": [
+        "8",
+        "9",
+        "10",
+        "11",
+        "12"
+      ],
+      "correctIndex": 2,
+      "explanation": "Use as many of the largest symbol as possible: 10,000 = 4×2401 + 343 + 49 + 4×1. This uses 4+1+1+4=10 symbols. Five 2401-symbols would already exceed 10,000; after four, the remaining 396 can use at most one 343, then one 49, leaving four 1-symbols. Therefore 10 is minimal.",
+      "accessTier": "normal",
+      "answerTier": "reg",
+      "submissionTier": "reg",
+      "explanationTier": "reg",
+      "maxAttempts": null
+    },
+    {
+      "id": "amc8-2025-adapted-q3-card-deal",
+      "code": "AMC 8 · Q3",
+      "title": "Dividing a Deck of Cards",
+      "description": "Translate a change in player count and cards per player into an equation.",
+      "topics": [
+        "Algebra",
+        "Word Problems",
+        "Linear Equations"
+      ],
+      "difficulty": 2,
+      "source": "AMC 8 2025 (adapted)",
+      "prompt": "A card game deals all the cards evenly among the players. When some players play, each gets 24 cards. When 3 more players join, each player gets 6 fewer cards. How many cards are in the deck?",
+      "choices": [
+        "144",
+        "180",
+        "216",
+        "240",
+        "288"
+      ],
+      "correctIndex": 2,
+      "explanation": "Let n be the original number of players. The deck size is 24n. With three more players, each gets 18 cards, so the same deck has 18(n+3) cards. Therefore 24n=18(n+3), giving n=9 and a deck size of 24×9=216.",
+      "accessTier": "normal",
+      "answerTier": "public",
+      "submissionTier": "public",
+      "explanationTier": "public",
+      "maxAttempts": null
+    },
+    {
+      "id": "amc8-2025-adapted-q4-arithmetic-sequence",
+      "code": "AMC 8 · Q4",
+      "title": "Adding a Backward Sequence",
+      "description": "Find the last positive term and sum an arithmetic sequence.",
+      "topics": [
+        "Algebra",
+        "Sequences",
+        "Arithmetic Series"
+      ],
+      "difficulty": 2,
+      "source": "AMC 8 2025 (adapted)",
+      "prompt": "Lucius counts backward by 9s: 250, 241, 232, … and keeps going. What is the sum of all the positive numbers he says?",
+      "choices": [
+        "3360",
+        "3596",
+        "3598",
+        "3605",
+        "3850"
+      ],
+      "correctIndex": 2,
+      "explanation": "The last positive term is 250−9×27=7, so there are 28 terms. Their sum is the arithmetic-series sum 28(250+7)/2=14×257=3598.",
+      "accessTier": "normal",
+      "answerTier": "public",
+      "submissionTier": "public",
+      "explanationTier": "public",
+      "maxAttempts": null
+    },
+    {
+      "id": "amc8-2025-adapted-q5-grid-route",
+      "code": "AMC 8 · Q5",
+      "title": "A Truck Driving on Grid Streets",
+      "description": "Use Manhattan distance to find the shortest route and convert travel time.",
+      "topics": [
+        "Geometry",
+        "Coordinate Geometry",
+        "Rates",
+        "Distance"
+      ],
+      "difficulty": 3,
+      "source": "AMC 8 2025 (adapted)",
+      "prompt": "Streets form a grid, and each block is 120 m long. Positions (in blocks) are F(9, 11), A(12, 7), B(0, 0), C(4, 10). Betty drives a truck at a constant 36 km/h from F to A, then B, then C, then back to F, always along the streets. At least how many minutes does the trip take?",
+      "choices": [
+        "7.6",
+        "8.8",
+        "9.2",
+        "9.6",
+        "10.4"
+      ],
+      "correctIndex": 2,
+      "explanation": "The shortest street distances are Manhattan distances: FA=|3|+|−4|=7 blocks, AB=12+7=19, BC=4+10=14, and CF=5+1=6. Total=46 blocks. The distance is 46×120=5520 m=5.52 km. At 36 km/h, the speed is 0.6 km/min, so the time is 5.52/0.6=9.2 minutes.",
+      "accessTier": "normal",
+      "answerTier": "reg",
+      "submissionTier": "reg",
+      "explanationTier": "reg",
+      "maxAttempts": null
+    },
+    {
+      "id": "amc8-2025-adapted-q6-erased-mean",
+      "code": "AMC 8 · Q6",
+      "title": "Finding an Erased Integer",
+      "description": "Use the mean of a consecutive integer set to recover the missing value.",
+      "topics": [
+        "Algebra",
+        "Statistics",
+        "Averages"
+      ],
+      "difficulty": 3,
+      "source": "AMC 8 2025 (adapted)",
+      "prompt": "The integers 1, 2, 3, …, n are written. One of them is erased. The mean of the remaining numbers is 20 23/39. Which number was erased?",
+      "choices": [
+        "13",
+        "15",
+        "17",
+        "19",
+        "21"
+      ],
+      "correctIndex": 2,
+      "explanation": "If r is the erased number, then [n(n+1)/2−r]/(n−1)=803/39. Testing the five listed candidates in this equation gives an integer n only for r=17, with n=40. Indeed, 1+⋯+40=820 and 820−17=803; the remaining 39 numbers have mean 803/39=20 23/39.",
+      "accessTier": "normal",
+      "answerTier": "reg",
+      "submissionTier": "reg",
+      "explanationTier": "reg",
+      "maxAttempts": null
+    },
+    {
+      "id": "amc8-2025-adapted-q7-score-bands",
+      "code": "AMC 8 · Q7",
+      "title": "Counting Students in Score Bands",
+      "description": "Use nested percentages to determine the size of a score interval.",
+      "topics": [
+        "Statistics",
+        "Percentages",
+        "Ratios"
+      ],
+      "difficulty": 3,
+      "source": "AMC 8 2025 (adapted)",
+      "prompt": "On an exam in Ms. Okafor’s class: 18% of the students scored at least 95%, 34% scored at least 90%, 60% scored at least 85%, and 90% scored at least 80%. Exactly 13 students scored at least 85% and less than 90%. How many students scored at least 80% and less than 90%?",
+      "choices": [
+        "13",
+        "20",
+        "28",
+        "32",
+        "45"
+      ],
+      "correctIndex": 2,
+      "explanation": "The 85%-to-under-90% band is 60%−34%=26% of the class. Since 26% equals 13 students, the class has 13/0.26=50 students. The 80%-to-under-90% band is 90%−34%=56% of the class, or 0.56×50=28 students.",
+      "accessTier": "normal",
+      "answerTier": "reg",
+      "submissionTier": "reg",
+      "explanationTier": "reg",
+      "maxAttempts": null
+    },
+    {
+      "id": "amc8-2025-adapted-q8-cube-net",
+      "code": "AMC 8 · Q8",
+      "title": "Volume from a Cube Net",
+      "description": "Convert the net area into a face side length, then find the cube volume.",
+      "topics": [
+        "Geometry",
+        "Solid Geometry",
+        "Surface Area",
+        "Volume"
+      ],
+      "difficulty": 3,
+      "source": "AMC 8 2025 (adapted)",
+      "prompt": "A cardboard cube is cut along some edges and unfolded into a flat net of 6 identical squares. The net has an area of 72 cm². What is the volume of the cube?",
+      "choices": [
+        "12√3",
+        "24",
+        "24√3",
+        "36",
+        "72"
+      ],
+      "correctIndex": 2,
+      "explanation": "The net contains six equal square faces, so each face has area 72/6=12 cm². The side length is √12=2√3 cm. The volume is (2√3)³=24√3 cm³.",
+      "accessTier": "normal",
+      "answerTier": "reg",
+      "submissionTier": "reg",
+      "explanationTier": "reg",
+      "maxAttempts": null
+    },
+    {
+      "id": "amc8-2025-adapted-q9-opposite-pairs",
+      "code": "AMC 8 · Q9",
+      "title": "Products of Opposite Numbers",
+      "description": "Pair numbers opposite each other on a 16-position dial.",
+      "topics": [
+        "Algebra",
+        "Patterns",
+        "Summation"
+      ],
+      "difficulty": 3,
+      "source": "AMC 8 2025 (adapted)",
+      "prompt": "On a dial, the numbers 1 to 16 are evenly spaced around a circle. Each number is paired with the number directly across from it (so there are 8 pairs). What is the sum of the products of the 8 pairs?",
+      "choices": [
+        "408",
+        "456",
+        "492",
+        "504",
+        "576"
+      ],
+      "correctIndex": 2,
+      "explanation": "The opposite pairs are (1,9),(2,10),…,(8,16). The sum is Σ from k=1 to 8 of k(k+8) = Σk² + 8Σk = 204 + 8×36 = 492.",
+      "accessTier": "normal",
+      "answerTier": "reg",
+      "submissionTier": "reg",
+      "explanationTier": "reg",
+      "maxAttempts": null
+    },
+    {
+      "id": "amc8-2025-adapted-q10-rotated-rectangle",
+      "code": "AMC 8 · Q10",
+      "title": "The Union of Two Rotated Rectangles",
+      "description": "Find the overlap after a quarter-turn, then subtract it from the sum of the two areas.",
+      "topics": [
+        "Geometry",
+        "Area",
+        "Transformations"
+      ],
+      "difficulty": 4,
+      "source": "AMC 8 2025 (adapted)",
+      "prompt": "Rectangle ABCD has AB = 9 cm and AD = 4 cm (A top-left, B top-right, C bottom-right, D bottom-left). Point P is on side DC with DP = 3 cm. The rectangle is rotated 90° clockwise about P to give a second rectangle. What is the total area covered by the two overlapping rectangles?",
+      "choices": [
+        "54",
+        "57",
+        "60",
+        "63",
+        "66"
+      ],
+      "correctIndex": 2,
+      "explanation": "Place D=(0,0), C=(9,0), A=(0,4), B=(9,4), and P=(3,0). A 90° clockwise rotation about P maps the rectangle to one with x-coordinates from 3 to 7 and y-coordinates from −6 to 3. Its overlap with the original rectangle is a 4×3 rectangle of area 12. Each rectangle has area 36, so the union area is 36+36−12=60 cm².",
+      "accessTier": "normal",
+      "answerTier": "reg",
+      "submissionTier": "reg",
+      "explanationTier": "reg",
+      "maxAttempts": 2
+    },
+    {
+      "id": "amc8-2025-adapted-q11-tetromino-tiling",
+      "code": "AMC 8 · Q11",
+      "title": "Tiling a 3 × 4 Rectangle",
+      "description": "Determine which pair of tetromino types can accompany a T tetromino in a complete tiling.",
+      "topics": [
+        "Geometry",
+        "Combinatorics",
+        "Tessellations"
+      ],
+      "difficulty": 4,
+      "source": "AMC 8 2025 (adapted)",
+      "prompt": "There are five tetromino shapes (four squares joined by edges): I, O, L, T, S. They can be rotated or flipped over. Three tetrominoes completely cover a 3 × 4 rectangle, and at least one of them is a T tile. What are the other two tiles?",
+      "choices": [
+        "I and L",
+        "I and T",
+        "L and L",
+        "L and T",
+        "O and T"
+      ],
+      "correctIndex": 3,
+      "explanation": "The 3×4 rectangle has 12 unit squares, so exactly three tetrominoes are used. Checking the possible rotations and reflections while filling the rectangle without gaps or overlaps shows that the only multiset containing a T tile is T, T, and L. Therefore, the other two tiles are L and T.",
+      "accessTier": "normal",
+      "answerTier": "reg",
+      "submissionTier": "reg",
+      "explanationTier": "reg",
+      "maxAttempts": 2
+    },
+    {
+      "id": "amc8-2025-adapted-q12-largest-circle",
+      "code": "AMC 8 · Q12",
+      "title": "The Largest Circle in a Stepped Region",
+      "description": "Find the greatest distance from a centrally symmetric region’s centre to its boundary.",
+      "topics": [
+        "Geometry",
+        "Circles",
+        "Area"
+      ],
+      "difficulty": 4,
+      "source": "AMC 8 2025 (adapted)",
+      "prompt": "A region is made of 40 unit squares (1 cm by 1 cm) in 8 rows. From top to bottom the rows have 2, 4, 6, 8, 8, 6, 4, 2 squares, and all rows are centred on the same vertical line. What is the area, in cm², of the largest circle that fits inside the region (it may touch the boundary)?",
+      "choices": [
+        "5π",
+        "6π",
+        "8π",
+        "9π",
+        "10π"
+      ],
+      "correctIndex": 2,
+      "explanation": "The region is symmetric about its horizontal and vertical midlines, so the largest inscribed circle is centred at the common centre. The limiting boundary points are the inward step corners, 2 units horizontally and 2 units vertically from the centre. The radius is therefore √(2²+2²)=2√2, and the area is π(2√2)²=8π cm².",
+      "accessTier": "normal",
+      "answerTier": "reg",
+      "submissionTier": "reg",
+      "explanationTier": "reg",
+      "maxAttempts": 2
+    },
+    {
+      "id": "amc8-2025-adapted-q13-remainders",
+      "code": "AMC 8 · Q13",
+      "title": "Remainders of Multiples of Five",
+      "description": "Use the repeating remainder cycle modulo 12.",
+      "topics": [
+        "Number Theory",
+        "Modular Arithmetic",
+        "Sequences"
+      ],
+      "difficulty": 4,
+      "source": "AMC 8 2025 (adapted)",
+      "prompt": "Each of the multiples of 5 from 5 to 205 (that is 5, 10, 15, …, 205) is divided by 12, and the remainders are recorded. What is the sum of all the remainders that occur exactly four times?",
+      "choices": [
+        "15",
+        "21",
+        "27",
+        "33",
+        "39"
+      ],
+      "correctIndex": 2,
+      "explanation": "There are 41 multiples. Since 5 is relatively prime to 12, the remainders cycle through 5,10,3,8,1,6,11,4,9,2,7,0 and repeat every 12 terms. Three full cycles account for 36 terms; the remaining five are 5,10,3,8,1. These five remainders occur four times, so their sum is 27.",
+      "accessTier": "normal",
+      "answerTier": "reg",
+      "submissionTier": "reg",
+      "explanationTier": "reg",
+      "maxAttempts": 2
+    },
+    {
+      "id": "amc8-2025-adapted-q14-mean-median",
+      "code": "AMC 8 · Q14",
+      "title": "A Number Added to a List",
+      "description": "Compare the new mean with twice the median of six values.",
+      "topics": [
+        "Statistics",
+        "Averages",
+        "Algebra"
+      ],
+      "difficulty": 2,
+      "source": "AMC 8 2025 (adapted)",
+      "prompt": "A number N is inserted into the list 3, 8, 12, 12, 40. The mean of the new list is twice the median. What is N?",
+      "choices": [
+        "24",
+        "36",
+        "45",
+        "69",
+        "75"
+      ],
+      "correctIndex": 3,
+      "explanation": "For N=69, the ordered list is 3,8,12,12,40,69. Its median is (12+12)/2=12. Its mean is (75+69)/6=24, which is twice the median. The other listed values do not satisfy the condition.",
+      "accessTier": "normal",
+      "answerTier": "public",
+      "submissionTier": "public",
+      "explanationTier": "public",
+      "maxAttempts": null
+    },
+    {
+      "id": "amc8-2025-adapted-q15-folded-grid",
+      "code": "AMC 8 · Q15",
+      "title": "Gold-on-Gold Pairs after Folding",
+      "description": "Optimize how 29 silver squares are distributed among 40 opposing pairs.",
+      "topics": [
+        "Combinatorics",
+        "Optimization",
+        "Counting"
+      ],
+      "difficulty": 4,
+      "source": "AMC 8 2025 (adapted)",
+      "prompt": "Kei draws a grid with 8 rows and 10 columns. He colours 29 unit squares silver and the rest gold. Then he folds the grid in half vertically (between column 5 and column 6), so the squares form 40 overlapping pairs. Let m and M be the least and greatest possible number of gold-on-gold pairs. What is m + M?",
+      "choices": [
+        "32",
+        "34",
+        "36",
+        "38",
+        "40"
+      ],
+      "correctIndex": 2,
+      "explanation": "There are 40 pairs and 29 silver squares. To minimize gold-on-gold pairs, put one silver square in each of 29 different pairs; the remaining 11 pairs are gold-on-gold, so m=11. To maximize them, concentrate the 29 silver squares into 15 pairs (two silver in 14 pairs and one in another), leaving 25 pairs with no silver; thus M=25. Therefore m+M=36.",
+      "accessTier": "normal",
+      "answerTier": "reg",
+      "submissionTier": "reg",
+      "explanationTier": "reg",
+      "maxAttempts": 2
+    },
+    {
+      "id": "amc8-2025-adapted-q16-paired-integers",
+      "code": "AMC 8 · Q16",
+      "title": "Choosing Integers without a Difference of 15",
+      "description": "Use the pairing (1,16), (2,17), …, (15,30).",
+      "topics": [
+        "Number Theory",
+        "Combinatorics",
+        "Integers"
+      ],
+      "difficulty": 4,
+      "source": "AMC 8 2025 (adapted)",
+      "prompt": "Seven distinct integers from 1 to 15 are chosen, and eight distinct integers from 16 to 30 are chosen. No two chosen numbers differ by exactly 15. What is the sum of the 15 chosen numbers?",
+      "choices": [
+        "225",
+        "232",
+        "240",
+        "247",
+        "255"
+      ],
+      "correctIndex": 2,
+      "explanation": "Pair i with i+15 for i=1,…,15. Since no pair can contribute both numbers, at most one number is chosen from each pair. There are 15 chosen numbers and 15 pairs, so exactly one is chosen from every pair. Starting with 1+⋯+15=120, replacing 8 of them by their partners adds 8×15=120. The sum is 240.",
+      "accessTier": "normal",
+      "answerTier": "reg",
+      "submissionTier": "reg",
+      "explanationTier": "reg",
+      "maxAttempts": 2
+    },
+    {
+      "id": "amc8-2025-adapted-q17-work-city",
+      "code": "AMC 8 · Q17",
+      "title": "Where Do the Residents Work?",
+      "description": "Combine the fractions of residents from three cities who work in city C.",
+      "topics": [
+        "Fractions",
+        "Ratios",
+        "Data Interpretation"
+      ],
+      "difficulty": 4,
+      "source": "AMC 8 2025 (adapted)",
+      "prompt": "In Markovia there are three cities A, B, C. 180 people live in A, 240 in B, and 300 in C. Everyone works in one of the three cities (maybe the city where they live). The fraction of the people living in each city who work in each other city is: A → B: 1/3, A → C: 1/4; B → A: 1/6, B → C: 1/4; C → A: 1/5, C → B: 1/10. (The rest work in the city where they live.) How many people work in C?",
+      "choices": [
+        "255",
+        "285",
+        "300",
+        "315",
+        "330"
+      ],
+      "correctIndex": 3,
+      "explanation": "From A, 1/4 of 180=45 people work in C. From B, 1/4 of 240=60 work in C. From C, the fraction who stay and work in C is 1−1/5−1/10=7/10, giving 210 people. Total working in C=45+60+210=315.",
+      "accessTier": "normal",
+      "answerTier": "reg",
+      "submissionTier": "reg",
+      "explanationTier": "reg",
+      "maxAttempts": 2
+    },
+    {
+      "id": "amc8-2025-adapted-q18-circle-hexagon",
+      "code": "AMC 8 · Q18",
+      "title": "Shaded Area between a Circle and Hexagon",
+      "description": "Compare the area outside an inscribed regular hexagon in two circles.",
+      "topics": [
+        "Geometry",
+        "Circles",
+        "Regular Polygons",
+        "Area"
+      ],
+      "difficulty": 4,
+      "source": "AMC 8 2025 (adapted)",
+      "prompt": "A circle has radius 4, and the region between the circle and its inscribed regular hexagon is shaded. A second circle has radius R, also with an inscribed regular hexagon, but only one fifth of the region between this circle and its hexagon is shaded. The two shaded regions have the same area. What is R?",
+      "choices": [
+        "8",
+        "4√5",
+        "10",
+        "16",
+        "20"
+      ],
+      "correctIndex": 1,
+      "explanation": "For every circle, the area between the circle and its inscribed regular hexagon is a fixed constant times r²: πr²−(3√3/2)r². Equating the first full region with one fifth of the second gives 4²K=(1/5)R²K. Thus R²=80 and R=4√5.",
+      "accessTier": "normal",
+      "answerTier": "reg",
+      "submissionTier": "reg",
+      "explanationTier": "reg",
+      "maxAttempts": 2
+    },
+    {
+      "id": "amc8-2025-adapted-q19-meeting-cars",
+      "code": "AMC 8 · Q19",
+      "title": "Two Cars Meet under Changing Speed Limits",
+      "description": "Use piecewise travel times to locate the meeting point.",
+      "topics": [
+        "Algebra",
+        "Rates",
+        "Distance",
+        "Piecewise Reasoning"
+      ],
+      "difficulty": 5,
+      "source": "AMC 8 2025 (adapted)",
+      "prompt": "Towns A and B are joined by a straight road 24 miles long. Going from A to B, the speed limit changes every 6 miles: 30, 60, 20, then 40 mph. Two cars start at the same time, one at A and one at B, and drive toward each other at exactly the speed limit. How far from A (in miles) do they meet?",
+      "choices": [
+        "12.5",
+        "13",
+        "13.5",
+        "14",
+        "15"
+      ],
+      "correctIndex": 2,
+      "explanation": "The meeting point lies in the third 6-mile segment (12 to 18 miles), where both cars travel at 20 mph. If the meeting point is x miles from A, the A-car takes 6/30+6/60+(x−12)/20 hours, while the B-car takes 6/40+(18−x)/20 hours. Equating gives x=13.5 miles.",
+      "accessTier": "normal",
+      "answerTier": "reg",
+      "submissionTier": "reg",
+      "explanationTier": "vip",
+      "maxAttempts": 2
+    },
+    {
+      "id": "amc8-2025-adapted-q20-cheese-series",
+      "code": "AMC 8 · Q20",
+      "title": "Sharing Cheese in Repeated Turns",
+      "description": "Add the first friend’s shares as an infinite geometric series.",
+      "topics": [
+        "Algebra",
+        "Sequences",
+        "Infinite Series"
+      ],
+      "difficulty": 4,
+      "source": "AMC 8 2025 (adapted)",
+      "prompt": "Four friends share a large block of cheese. The first friend eats 1/3 of the cheese. Then the second eats 1/3 of what remains, then the third eats 1/3 of what remains, then the fourth, then back to the first, and so on forever. What fraction of the original block does the first friend eat in total?",
+      "choices": [
+        "1/3",
+        "2/5",
+        "27/65",
+        "4/9",
+        "1/2"
+      ],
+      "correctIndex": 2,
+      "explanation": "The first friend eats 1/3 initially. After all four friends have taken a turn, the remaining amount has been multiplied by (2/3)^4=16/81. The first friend’s later shares form a geometric series: (1/3)[1+16/81+(16/81)²+…]. Its sum is (1/3)/(1−16/81)=27/65.",
+      "accessTier": "normal",
+      "answerTier": "reg",
+      "submissionTier": "reg",
+      "explanationTier": "reg",
+      "maxAttempts": 2
+    },
+    {
+      "id": "amc8-2025-adapted-q21-pod-grades",
+      "code": "AMC 8 · Q21",
+      "title": "Assigning Grades to Connected Pods",
+      "description": "The pairs that may differ by one grade form a single path.",
+      "topics": [
+        "Combinatorics",
+        "Graph Theory",
+        "Logic"
+      ],
+      "difficulty": 5,
+      "source": "AMC 8 2025 (adapted)",
+      "prompt": "Grades 1 to 7 are assigned to pods A to G (one grade per pod). Every pair of pods is joined by a walkway, except these six pairs, which are not joined: A–C, B–E, C–F, D–G, A–E, B–G. Any two pods joined by a walkway have grades that differ by 2 or more. Pod F has a higher grade than pod D. What is the sum of the grades of pods A, B and F?",
+      "choices": [
+        "11",
+        "13",
+        "15",
+        "17",
+        "19"
+      ],
+      "correctIndex": 2,
+      "explanation": "Any two pods whose grades differ by exactly 1 must be one of the six non-connected pairs. Those six pairs form the path F–C–A–E–B–G–D. Consecutive grades 1 through 7 must be assigned along this path. Since F has a higher grade than D, the order is reversed: D=1, G=2, B=3, E=4, A=5, C=6, F=7. Thus A+B+F=5+3+7=15.",
+      "accessTier": "normal",
+      "answerTier": "reg",
+      "submissionTier": "reg",
+      "explanationTier": "vip",
+      "maxAttempts": 2
+    },
+    {
+      "id": "amc8-2025-adapted-q22-coat-hooks",
+      "code": "AMC 8 · Q22",
+      "title": "Arranging Coats and Empty Hooks",
+      "description": "Translate equal empty gaps into a divisor equation.",
+      "topics": [
+        "Number Theory",
+        "Divisibility",
+        "Combinatorics"
+      ],
+      "difficulty": 4,
+      "source": "AMC 8 2025 (adapted)",
+      "prompt": "A classroom has a row of 119 coat hooks. There is the same number of empty hooks before the first coat, after the last coat, and between every coat and the next one. There is at least 1 coat and at least 1 empty hook. How many different numbers of coats can satisfy this pattern?",
+      "choices": [
+        "12",
+        "13",
+        "14",
+        "15",
+        "16"
+      ],
+      "correctIndex": 2,
+      "explanation": "Let n be the number of coats and g≥1 the number of empty hooks in each of the n+1 gaps. Then 119=n+g(n+1), so (n+1)(g+1)=120. Both factors are at least 2, so n+1 must be a divisor d of 120 with 2≤d≤60. The divisors in this range are 2,3,4,5,6,8,10,12,15,20,24,30,40,60, giving 14 possible values of n.",
+      "accessTier": "normal",
+      "answerTier": "reg",
+      "submissionTier": "reg",
+      "explanationTier": "reg",
+      "maxAttempts": 2
+    },
+    {
+      "id": "amc8-2025-adapted-q23-semiprimes",
+      "code": "AMC 8 · Q23",
+      "title": "Four-Digit Semiprimes near a Square",
+      "description": "Use a difference of squares and test the resulting prime factors.",
+      "topics": [
+        "Number Theory",
+        "Primes",
+        "Perfect Squares"
+      ],
+      "difficulty": 5,
+      "source": "AMC 8 2025 (adapted)",
+      "prompt": "How many four-digit numbers have all three of these properties? (I) The tens digit and ones digit are both 3. (II) The number is 16 less than a perfect square. (III) The number is the product of exactly two prime numbers.",
+      "choices": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "correctIndex": 2,
+      "explanation": "Let N=m²−16. Since N is a four-digit number ending in 33, m²=N+16 must end in 49. For 32≤m≤100, the only possibilities are m=43, 57, and 93. They give N=1833, 3233, and 8633. Now 1833=3×13×47 has three prime factors, while 3233=53×61 and 8633=89×97 are products of exactly two primes. Therefore exactly two numbers satisfy all three conditions.",
+      "accessTier": "normal",
+      "answerTier": "reg",
+      "submissionTier": "reg",
+      "explanationTier": "vip",
+      "maxAttempts": 2
+    },
+    {
+      "id": "amc8-2025-adapted-q24-isosceles-trapezoid",
+      "code": "AMC 8 · Q24",
+      "title": "Integer-Sided Isosceles Trapezoids",
+      "description": "Relate the difference of the bases to the equal legs and count integer solutions.",
+      "topics": [
+        "Geometry",
+        "Number Theory",
+        "Diophantine Equations"
+      ],
+      "difficulty": 6,
+      "source": "AMC 8 2025 (adapted)",
+      "prompt": "In trapezoid ABCD (AD parallel to BC), angles B and C are 60° and AB = DC. All side lengths are positive integers, the perimeter is 100, and the shorter base AD is at least as long as each leg. How many non-congruent trapezoids satisfy all these conditions?",
+      "choices": [
+        "8",
+        "9",
+        "10",
+        "12",
+        "16"
+      ],
+      "correctIndex": 2,
+      "explanation": "Let each equal leg have integer length L and the shorter base AD have length a. Each leg has horizontal projection L cos60°=L/2, so the longer base BC exceeds AD by L. Thus BC=a+L. The perimeter condition is a+(a+L)+2L=100, or 2a+3L=100. Since a and L are integers, L must be even. The condition a≥L gives 100−3L≥2L, so L≤20. The possible values are L=2,4,…,20, giving 10 trapezoids.",
+      "accessTier": "normal",
+      "answerTier": "vip",
+      "submissionTier": "reg",
+      "explanationTier": "vip",
+      "maxAttempts": 2
+    },
+    {
+      "id": "amc8-2025-adapted-q25-lattice-path-area",
+      "code": "AMC 8 · Q25",
+      "title": "Summing Areas under Lattice Paths",
+      "description": "Use symmetry to pair each path with its reflection.",
+      "topics": [
+        "Combinatorics",
+        "Geometry",
+        "Lattice Paths",
+        "Area"
+      ],
+      "difficulty": 6,
+      "source": "AMC 8 2025 (adapted)",
+      "prompt": "A rectangular grid of unit squares is turned 45° so it looks like a diamond. It has 4 squares along one side and 7 squares along the other. A path starts at the bottom corner and ends at the top corner, and each step goes one unit northeast or northwest. For each path, find the area between the path and the right side of the grid. What is the sum of these areas over all possible paths?",
+      "choices": [
+        "2310",
+        "3960",
+        "4620",
+        "5544",
+        "9240"
+      ],
+      "correctIndex": 2,
+      "explanation": "Every path consists of 4 northeast steps and 7 northwest steps, so there are C(11,4)=330 paths. For each path, the areas on its left and right add to the full 4×7 grid area, 28. Reflection pairs paths and swaps left and right areas, so the total sum of right-side areas equals the total sum of left-side areas. Therefore twice the required sum is 330×28, and the answer is 330×14=4620.",
+      "accessTier": "normal",
+      "answerTier": "vip",
+      "submissionTier": "reg",
+      "explanationTier": "vip",
+      "maxAttempts": 2
+    }
+  ]
+}
