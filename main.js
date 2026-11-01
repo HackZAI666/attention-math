@@ -25,6 +25,9 @@ let allQuestions = [];
 let activeTopic = "all";
 let isIndexReady = false;
 let currentQuestion = null;
+let appReady = false;
+let answerRevealed = false;
+let explanationRevealed = false;
 
 function sleep(milliseconds) { return new Promise(resolve => window.setTimeout(resolve, milliseconds)); }
 
@@ -81,23 +84,35 @@ function renderAuthState(user) {
   }
   renderAnswerPanel();
   renderSolutionPanel();
+  if (user && appReady) claimGuestPumpkinTrophy(user);
+  if (appReady) {
+    renderPumpkinTrophyState();
+    renderDashboardPanel();
+  }
 }
 
 auth = createAuth({ onAuthChange: renderAuthState, onRegistered: () => preferences.open() });
 preferences = createPreferences({ getCurrentUser: auth.getCurrentUser, updatePreferences: auth.updatePreferences, onSaved: () => {} });
 
-document.getElementById("open-dashboard").addEventListener("click", () => {
+document.getElementById("open-dashboard").addEventListener("click", () => openDashboard("problems"));
+function openDashboard(view = "problems") {
+  if (!auth.getCurrentUser()) { auth.open("login"); return; }
   document.getElementById("dashboard-modal").hidden = false;
   document.body.classList.add("modal-open");
-});
+  setDashboardView(view);
+  renderDashboardPanel();
+  renderPumpkinTrophyState();
+}
 function closeDashboard() {
   document.getElementById("dashboard-modal").hidden = true;
-  if (document.getElementById("question-modal").hidden && document.getElementById("auth-modal").hidden && document.getElementById("preferences-modal").hidden) {
+  if (document.getElementById("question-modal").hidden && document.getElementById("auth-modal").hidden && document.getElementById("preferences-modal").hidden && document.getElementById("pumpkin-modal").hidden) {
     document.body.classList.remove("modal-open");
   }
 }
 document.getElementById("dashboard-close").addEventListener("click", closeDashboard);
 document.getElementById("dashboard-done").addEventListener("click", closeDashboard);
+document.querySelectorAll("[data-dashboard-view]").forEach(button => button.addEventListener("click", () => setDashboardView(button.dataset.dashboardView)));
+document.querySelectorAll("[data-equip-title]").forEach(button => button.addEventListener("click", () => equipPlayerTitle(button.dataset.equipTitle)));
 document.getElementById("dashboard-modal").addEventListener("click", event => { if (event.target === event.currentTarget) closeDashboard(); });
 
 // The provided logo is bundled locally; no manual upload is required.
@@ -143,7 +158,18 @@ const searchFeedback = document.getElementById("search-feedback");
 const accessFilter = document.getElementById("access-filter");
 const difficultyFilter = document.getElementById("difficulty-filter");
 const topicFilters = document.getElementById("topic-filters");
+const moreTopicsToggle = document.getElementById("more-topics-toggle");
+let topicFiltersExpanded = false;
 const ATTEMPTS_KEY = "attention_question_attempts_v3";
+const PUMPKIN_TROPHY_KEY = "attention_pumpkin_trophy_v1";
+const EQUIPPED_TITLE_KEY = "attention_equipped_title_v1";
+const RANK_STARS_KEY = "attention_rank_stars_v1";
+
+const PLAYER_TITLES = Object.freeze({
+  halloween: { label: "HALLOWEEN", image: "assets/title_halloween.png", description: "Unlocked by earning the Pumpkin Learner trophy." },
+  expert: { label: "高手", image: "assets/title_expert.png", description: "Unlocked at 30 ranked stars. Ranked play is not open yet." },
+  "strongest-brain": { label: "最强大脑", image: "assets/title_strongest_brain.png", description: "50 ranked stars · Under development and not obtainable yet." }
+});
 
 function tierLabel(tier) {
   return ({ public: "Public", reg: "REG account", vip: "VIP" })[tier] || "Public";
@@ -191,6 +217,271 @@ function makeElement(tag, className, text) {
   return element;
 }
 
+
+// ---------- Dashboard activity and Halloween trophy ----------
+function readTrophyRecords() {
+  try {
+    const value = JSON.parse(localStorage.getItem(PUMPKIN_TROPHY_KEY) || "{}");
+    return value && typeof value === "object" && !Array.isArray(value) ? value : {};
+  } catch { return {}; }
+}
+function writeTrophyRecords(records) {
+  localStorage.setItem(PUMPKIN_TROPHY_KEY, JSON.stringify(records));
+}
+function trophyOwnerKey(user = auth.getCurrentUser()) {
+  return user ? `user:${user.id}` : "guest";
+}
+function hasPumpkinTrophy(user = auth.getCurrentUser()) {
+  return readTrophyRecords()[trophyOwnerKey(user)]?.earned === true;
+}
+function claimGuestPumpkinTrophy(user) {
+  if (!user) return;
+  const records = readTrophyRecords();
+  const guestAward = records.guest;
+  const accountKey = `user:${user.id}`;
+  if (guestAward?.earned === true && records[accountKey]?.earned !== true) {
+    records[accountKey] = { ...guestAward, claimedFromGuest: true, claimedAt: new Date().toISOString() };
+    writeTrophyRecords(records);
+  }
+}
+function awardPumpkinTrophy() {
+  const records = readTrophyRecords();
+  const key = trophyOwnerKey();
+  records[key] = { earned: true, trophyId: "pumpkin-learner", earnedAt: new Date().toISOString() };
+  writeTrophyRecords(records);
+  renderPumpkinTrophyState();
+  renderDashboardPanel();
+}
+function setTrophyImageState(imageId, fallbackId) {
+  const image = document.getElementById(imageId);
+  const fallback = document.getElementById(fallbackId);
+  if (!image || !fallback) return;
+  if (image.dataset.fallbackBound !== "true") {
+    image.addEventListener("load", () => { image.hidden = false; fallback.hidden = true; });
+    image.addEventListener("error", () => { image.hidden = true; fallback.hidden = false; });
+    image.dataset.fallbackBound = "true";
+  }
+  if (image.complete && image.naturalWidth > 0) { image.hidden = false; fallback.hidden = true; }
+  else { image.hidden = true; fallback.hidden = false; }
+}
+function readEquippedTitles() {
+  try {
+    const value = JSON.parse(localStorage.getItem(EQUIPPED_TITLE_KEY) || "{}");
+    return value && typeof value === "object" && !Array.isArray(value) ? value : {};
+  } catch { return {}; }
+}
+function writeEquippedTitles(value) {
+  localStorage.setItem(EQUIPPED_TITLE_KEY, JSON.stringify(value));
+}
+function currentUserStorageKey(user = auth.getCurrentUser()) {
+  return user ? `user:${user.id}` : "guest";
+}
+function getRankStars(user = auth.getCurrentUser()) {
+  if (!user) return 0;
+  try {
+    const value = JSON.parse(localStorage.getItem(RANK_STARS_KEY) || "{}");
+    const stars = value?.[currentUserStorageKey(user)];
+    return Number.isFinite(stars) && stars >= 0 ? Math.floor(stars) : 0;
+  } catch { return 0; }
+}
+function isTitleUnlocked(titleId, user = auth.getCurrentUser()) {
+  if (!user) return false;
+  if (titleId === "halloween") return hasPumpkinTrophy(user);
+  if (titleId === "expert") return getRankStars(user) >= 30;
+  // Strongest Brain is intentionally unavailable while this rank is under development.
+  return false;
+}
+function getEquippedTitleId(user = auth.getCurrentUser()) {
+  if (!user) return null;
+  const titleId = readEquippedTitles()[currentUserStorageKey(user)];
+  return titleId && PLAYER_TITLES[titleId] && isTitleUnlocked(titleId, user) ? titleId : null;
+}
+function bindTitleImage(imageId, fallbackId, src, fallbackText) {
+  const image = document.getElementById(imageId);
+  const fallback = document.getElementById(fallbackId);
+  if (!image || !fallback) return;
+  fallback.textContent = fallbackText;
+  if (image.dataset.fallbackBound !== "true") {
+    image.addEventListener("load", () => { image.hidden = false; fallback.hidden = true; });
+    image.addEventListener("error", () => { image.hidden = true; fallback.hidden = false; });
+    image.dataset.fallbackBound = "true";
+  }
+  if (image.getAttribute("src") !== src) image.setAttribute("src", src);
+  if (image.complete && image.naturalWidth > 0) { image.hidden = false; fallback.hidden = true; }
+  else { image.hidden = true; fallback.hidden = false; }
+}
+function renderEquippedTitleBadge() {
+  const wrapper = document.getElementById("sidebar-equipped-title");
+  const user = auth.getCurrentUser();
+  const titleId = getEquippedTitleId(user);
+  if (!wrapper || !user || !titleId) {
+    if (wrapper) wrapper.hidden = true;
+    return;
+  }
+  const title = PLAYER_TITLES[titleId];
+  wrapper.hidden = false;
+  bindTitleImage("sidebar-equipped-title-image", "sidebar-equipped-title-fallback", title.image, title.label);
+}
+function renderTitlesPanel() {
+  const user = auth.getCurrentUser();
+  const equippedId = getEquippedTitleId(user);
+  for (const [titleId, title] of Object.entries(PLAYER_TITLES)) {
+    const card = document.getElementById(`title-card-${titleId}`);
+    if (!card) continue;
+    const unlocked = isTitleUnlocked(titleId, user);
+    const equipped = unlocked && equippedId === titleId;
+    card.classList.toggle("is-locked", !unlocked);
+    card.classList.toggle("is-equipped", equipped);
+    const description = document.getElementById(`title-description-${titleId}`);
+    const status = document.getElementById(`title-status-${titleId}`);
+    const lock = document.getElementById(`title-lock-${titleId}`);
+    const button = document.getElementById(`title-equip-${titleId}`);
+    if (description) description.textContent = title.description;
+    if (status) status.textContent = titleId === "strongest-brain" ? "IN DEVELOPMENT" : equipped ? "EQUIPPED" : unlocked ? "UNLOCKED" : "LOCKED";
+    if (lock) lock.hidden = unlocked;
+    if (button) {
+      button.disabled = !unlocked || equipped;
+      button.textContent = equipped ? "Equipped" : unlocked ? "Equip title" : "Locked";
+    }
+    bindTitleImage(`title-image-${titleId}`, `title-fallback-${titleId}`, title.image, title.label);
+  }
+  renderEquippedTitleBadge();
+}
+function equipPlayerTitle(titleId) {
+  const user = auth.getCurrentUser();
+  if (!user || !PLAYER_TITLES[titleId] || !isTitleUnlocked(titleId, user)) return;
+  const equipped = readEquippedTitles();
+  equipped[currentUserStorageKey(user)] = titleId;
+  try {
+    writeEquippedTitles(equipped);
+    renderTitlesPanel();
+  } catch {
+    window.alert("Your browser could not save the equipped title. Check available site storage.");
+  }
+}
+
+function renderPumpkinTrophyState() {
+  const earned = hasPumpkinTrophy();
+  const card = document.getElementById("pumpkin-trophy-card");
+  if (card) card.classList.toggle("is-earned", earned);
+  const honorsStatus = document.getElementById("honors-pumpkin-status");
+  if (honorsStatus) honorsStatus.textContent = earned ? "UNLOCKED" : "LOCKED";
+  const honorsDescription = document.getElementById("honors-pumpkin-description");
+  if (honorsDescription) honorsDescription.textContent = earned
+    ? "Awarded for solving the four-star Halloween number theory challenge."
+    : "Solve the hidden Halloween challenge to unlock this commemorative trophy.";
+  const count = document.getElementById("trophy-count");
+  if (count) count.textContent = earned ? "1 UNLOCKED" : "0 UNLOCKED";
+  [
+    ["honors-pumpkin-trophy", "honors-pumpkin-trophy-fallback"],
+    ["challenge-pumpkin-trophy", "challenge-pumpkin-trophy-fallback"]
+  ].forEach(([imageId, fallbackId]) => setTrophyImageState(imageId, fallbackId));
+  setTrophyImageState("strongest-brain-rank-image", "strongest-brain-rank-fallback");
+  const awardPanel = document.getElementById("pumpkin-challenge-award");
+  if (awardPanel) awardPanel.hidden = !earned;
+  renderTitlesPanel();
+}
+function setDashboardView(view) {
+  const selected = ["problems", "honors", "titles", "ranks"].includes(view) ? view : "problems";
+  document.getElementById("dashboard-view-problems").hidden = selected !== "problems";
+  document.getElementById("dashboard-view-honors").hidden = selected !== "honors";
+  document.getElementById("dashboard-view-titles").hidden = selected !== "titles";
+  document.getElementById("dashboard-view-ranks").hidden = selected !== "ranks";
+  document.getElementById("dashboard-heading").textContent = ({ problems: "My Problems", honors: "Honors", titles: "Titles", ranks: "Rank Rules" })[selected];
+  if (selected === "titles") renderTitlesPanel();
+  document.querySelectorAll("[data-dashboard-view]").forEach(button => {
+    const active = button.dataset.dashboardView === selected;
+    button.classList.toggle("is-active", active);
+    button.setAttribute("aria-current", active ? "page" : "false");
+  });
+  setTrophyImageState("strongest-brain-rank-image", "strongest-brain-rank-fallback");
+}
+function renderDashboardPanel() {
+  const list = document.getElementById("dashboard-problems-list");
+  const empty = document.getElementById("dashboard-problems-empty");
+  if (!list || !empty || !auth.getCurrentUser()) return;
+  const user = auth.getCurrentUser();
+  const prefix = `user:${user.id}:`;
+  const records = readAttemptRecords();
+  const attempted = Object.entries(records)
+    .filter(([key, record]) => key.startsWith(prefix) && record && Number.isInteger(record.count) && record.count > 0)
+    .map(([key, record]) => ({ question: allQuestions.find(item => item.id === key.slice(prefix.length)), record }))
+    .filter(item => item.question)
+    .sort((a, b) => String(b.record.updatedAt || "").localeCompare(String(a.record.updatedAt || "")));
+  list.replaceChildren();
+  attempted.forEach(({ question, record }) => {
+    const row = makeElement("article", "dashboard-problem-row");
+    const info = makeElement("div", "dashboard-problem-info");
+    info.append(makeElement("span", "dashboard-problem-code", question.code), makeElement("strong", "", question.title), makeElement("small", "", `${question.difficulty}/7 stars · ${question.source}`));
+    const result = makeElement("span", `dashboard-result ${record.correct ? "is-correct" : "is-incorrect"}`, record.correct ? "Correct" : "Attempted");
+    const attempts = makeElement("small", "dashboard-problem-attempts", `${record.count} attempt${record.count === 1 ? "" : "s"}`);
+    row.append(info, result, attempts);
+    row.addEventListener("click", () => { closeDashboard(); openQuestion(question); });
+    list.append(row);
+  });
+  empty.hidden = attempted.length > 0;
+  list.hidden = attempted.length === 0;
+  renderPumpkinTrophyState();
+}
+
+// ---------- Clickable Halloween pumpkin challenge ----------
+const PUMPKIN_CHALLENGE_ANSWER = 144;
+function openPumpkinChallenge() {
+  const modal = document.getElementById("pumpkin-modal");
+  const feedback = document.getElementById("pumpkin-challenge-feedback");
+  const input = document.getElementById("pumpkin-numeric-answer");
+  const earned = hasPumpkinTrophy();
+  feedback.textContent = earned
+    ? "You have already earned the Pumpkin Learner trophy. Thank you for taking the challenge!"
+    : "Solve it correctly to earn the Pumpkin Learner trophy. You may reveal one small hint below.";
+  input.value = "";
+  const hint = document.querySelector(".challenge-hint-details");
+  if (hint) hint.open = false;
+  document.getElementById("pumpkin-answer-form").hidden = earned;
+  modal.hidden = false;
+  document.body.classList.add("modal-open");
+  renderPumpkinTrophyState();
+  if (!earned) input.focus();
+}
+function closePumpkinChallenge() {
+  document.getElementById("pumpkin-modal").hidden = true;
+  if (document.getElementById("dashboard-modal").hidden && document.getElementById("question-modal").hidden && document.getElementById("auth-modal").hidden && document.getElementById("preferences-modal").hidden) {
+    document.body.classList.remove("modal-open");
+  }
+}
+document.getElementById("pumpkin-challenge-button").addEventListener("click", openPumpkinChallenge);
+document.getElementById("pumpkin-challenge-close").addEventListener("click", closePumpkinChallenge);
+document.getElementById("pumpkin-modal").addEventListener("click", event => { if (event.target === event.currentTarget) closePumpkinChallenge(); });
+document.getElementById("pumpkin-answer-form").addEventListener("submit", event => {
+  event.preventDefault();
+  const input = document.getElementById("pumpkin-numeric-answer");
+  const feedback = document.getElementById("pumpkin-challenge-feedback");
+  const answer = String(input.value || "").trim();
+  if (!/^\d{1,4}$/.test(answer)) {
+    feedback.textContent = "Enter a whole number containing one to four digits.";
+    feedback.classList.add("is-error");
+    return;
+  }
+  feedback.classList.remove("is-error");
+  if (Number(answer) === PUMPKIN_CHALLENGE_ANSWER) {
+    awardPumpkinTrophy();
+    feedback.textContent = "Correct! Your Pumpkin Learner trophy has been awarded and added to Honors.";
+    document.getElementById("pumpkin-answer-form").hidden = true;
+    document.getElementById("pumpkin-challenge-award").hidden = false;
+  } else {
+    feedback.textContent = "Not quite — try thinking about the prime factorization and the divisor-count formula.";
+  }
+});
+document.getElementById("pumpkin-view-honors").addEventListener("click", () => {
+  closePumpkinChallenge();
+  if (auth.getCurrentUser()) openDashboard("honors");
+  else auth.open("login");
+});
+document.getElementById("more-topics-toggle").addEventListener("click", () => {
+  topicFiltersExpanded = !topicFiltersExpanded;
+  updateMoreTopicsButton();
+});
+
 function renderQuestionCard(question) {
   const card = makeElement("button", "question-card");
   card.type = "button";
@@ -215,20 +506,33 @@ function renderQuestionCard(question) {
 }
 
 function renderTopicFilters() {
-  const topics = [...new Set(allQuestions.flatMap(question => question.topics))]
-    .sort((a, b) => a.localeCompare(b));
+  const topics = [...new Set(allQuestions.flatMap(question => question.topics))];
+  const priority = ["Algebra", "Geometry", "Calculus", "Functions", "Trigonometry", "Probability"];
+  const coreTopics = priority.filter(topic => topics.includes(topic));
+  const remainingTopics = topics.filter(topic => !coreTopics.includes(topic)).sort((a, b) => a.localeCompare(b));
+  const orderedTopics = [...coreTopics, ...remainingTopics];
   const buttons = [makeElement("button", "topic-chip is-active", "All topics")];
   buttons[0].type = "button";
   buttons[0].dataset.topic = "all";
   buttons[0].setAttribute("aria-pressed", "true");
-  for (const topic of topics) {
-    const button = makeElement("button", "topic-chip", topic);
+  orderedTopics.forEach((topic, index) => {
+    const button = makeElement("button", `topic-chip${index >= coreTopics.length ? " is-extra-topic" : ""}`, topic);
     button.type = "button";
     button.dataset.topic = topic;
     button.setAttribute("aria-pressed", "false");
+    if (index >= coreTopics.length && !topicFiltersExpanded && topic !== activeTopic) button.hidden = true;
     buttons.push(button);
-  }
+  });
   topicFilters.replaceChildren(...buttons);
+  moreTopicsToggle.hidden = remainingTopics.length === 0;
+  updateMoreTopicsButton();
+}
+function updateMoreTopicsButton() {
+  moreTopicsToggle.setAttribute("aria-expanded", String(topicFiltersExpanded));
+  moreTopicsToggle.innerHTML = topicFiltersExpanded ? 'Fewer topics <span aria-hidden="true">⌃</span>' : 'More topics <span aria-hidden="true">⌄</span>';
+  topicFilters.querySelectorAll(".is-extra-topic").forEach(button => {
+    button.hidden = !topicFiltersExpanded && button.dataset.topic !== activeTopic;
+  });
 }
 function updateTopicButtonState() {
   topicFilters.querySelectorAll("button[data-topic]").forEach(button => {
@@ -277,7 +581,8 @@ function getAttemptRecord(question = currentQuestion) {
     count: Number.isInteger(record.count) && record.count >= 0 ? record.count : 0,
     correct: record.correct === true,
     selected: Number.isInteger(record.selected) && record.selected >= 0 && record.selected <= 4 ? record.selected : null,
-    lastCorrect: record.lastCorrect === true
+    answerText: Array.isArray(record.answerText) ? record.answerText.map(value => String(value ?? "")) : null,
+    lastCorrect: typeof record.lastCorrect === "boolean" ? record.lastCorrect : record.correct === true
   };
 }
 function writeAttemptRecord(question, record) {
@@ -285,6 +590,19 @@ function writeAttemptRecord(question, record) {
   records[answerStorageKey(question)] = record;
   localStorage.setItem(ATTEMPTS_KEY, JSON.stringify(records));
 }
+function normalizeShortAnswer(value) {
+  return String(value ?? "").normalize("NFKC").toLowerCase()
+    .replace(/π/g, "pi").replace(/[−–]/g, "-").replace(/\s+/g, "")
+    .replace(/×/g, "*").replace(/\*/g, "");
+}
+function checkShortAnswer(question, values) {
+  return Array.isArray(question.answerFields) && values.length === question.answerFields.length &&
+    question.answerFields.every((field, index) => field.accepted.some(answer => normalizeShortAnswer(answer) === normalizeShortAnswer(values[index])));
+}
+function formatShortAnswerKey(question) {
+  return question.answerFields.map(field => `${field.label}: ${field.display}`).join(" · ");
+}
+
 function renderAnswerPanel() {
   if (!currentQuestion) return;
   const guestState = document.getElementById("answer-guest-state");
@@ -293,16 +611,25 @@ function renderAnswerPanel() {
   const feedback = document.getElementById("answer-feedback");
   const status = document.getElementById("answer-attempt-status");
   const optionList = document.getElementById("answer-option-list");
+  const choiceFieldset = document.getElementById("answer-choices-fieldset");
+  const shortFields = document.getElementById("answer-short-fields");
+  const submitButton = document.getElementById("submit-answer-button");
+  const isShort = currentQuestion.answerMode === "short";
   const allowed = canSubmitAnswer(currentQuestion);
   const user = auth.getCurrentUser();
   guestState.hidden = allowed;
   answerForm.hidden = true;
   optionList.replaceChildren();
+  shortFields.replaceChildren();
+  choiceFieldset.hidden = isShort;
+  shortFields.hidden = !isShort;
+  feedback.classList.remove("is-error");
 
   if (!allowed) {
-    answerMessage.textContent = "Sign in or create a free account to answer questions rated 3 stars or higher.";
+    answerMessage.textContent = "Sign in with a free REG account to answer questions rated 3 stars or higher.";
     document.getElementById("question-login-button").hidden = false;
-    status.textContent = "Your selected answer and attempt history will be saved to this browser account.";
+    status.textContent = "All question statements remain open to visitors. Sign in to submit an answer at this difficulty.";
+    submitButton.hidden = false;
     return;
   }
 
@@ -310,17 +637,44 @@ function renderAnswerPanel() {
   const limit = attemptLimit(currentQuestion);
   const limited = Number.isFinite(limit);
   const exhausted = limited && (record.correct || record.count >= limit);
+  const submitted = record.count > 0;
+  const canRevealKey = canViewAnswer(currentQuestion);
   guestState.hidden = true;
   status.textContent = currentQuestion.difficulty >= 6 && membershipLevel(user) !== "vip"
-    ? "This level provides correctness feedback only. The reference answer and worked explanation are VIP content."
+    ? "This level gives REG accounts correctness feedback only. The answer and worked explanation are VIP content."
     : limited
       ? `Attempts used: ${record.count} / ${limit}. ${record.correct ? "Question completed." : `${Math.max(0, limit - record.count)} attempt(s) remaining.`}`
       : "No attempt limit for this question.";
 
-  if (exhausted) {
-    status.textContent = record.correct
-      ? `Correct — well done. You used ${record.count} of ${limit} permitted attempt(s).`
-      : `No attempts remaining (${record.count}/${limit}). You can still review any answer or explanation your membership unlocks.`;
+  submitButton.hidden = exhausted;
+  submitButton.disabled = exhausted;
+
+  if (isShort) {
+    currentQuestion.answerFields.forEach((field, index) => {
+      const wrapper = makeElement("label", "short-answer-field");
+      wrapper.append(makeElement("span", "short-answer-label", field.label));
+      const input = document.createElement("input");
+      input.type = "text";
+      input.name = `short-answer-${index}`;
+      input.dataset.fieldIndex = String(index);
+      input.autocomplete = "off";
+      input.spellcheck = false;
+      input.placeholder = field.placeholder || "Enter your answer";
+      input.required = !exhausted;
+      input.disabled = exhausted;
+      if (record.answerText && record.answerText[index] !== undefined) input.value = record.answerText[index];
+      if (submitted) wrapper.classList.add(record.lastCorrect ? "is-correct" : "is-incorrect");
+      wrapper.append(input);
+      shortFields.append(wrapper);
+    });
+    feedback.textContent = submitted
+      ? (record.lastCorrect
+          ? "Correct — your response is right."
+          : canRevealKey
+            ? "Not correct — your response is marked red. Reveal the reference answer when ready."
+            : "Not correct — your response is marked red. Your membership provides correctness feedback only.")
+      : "Enter your response in every field.";
+    answerForm.hidden = false;
     return;
   }
 
@@ -331,50 +685,87 @@ function renderAnswerPanel() {
     radio.name = "selected-answer";
     radio.value = String(index);
     radio.id = `answer-choice-${index}`;
+    radio.disabled = exhausted;
     const marker = makeElement("span", "answer-choice-letter", String.fromCharCode(65 + index));
     const content = makeElement("span", "answer-choice-value", choice);
     label.htmlFor = radio.id;
+    if (submitted && record.selected === index) {
+      radio.checked = true;
+      label.classList.add(record.lastCorrect ? "is-correct" : "is-incorrect");
+    }
+    if (answerRevealed && canRevealKey && index === currentQuestion.correctIndex) {
+      label.classList.add("is-correct-answer");
+    }
     label.append(radio, marker, content);
     optionList.append(label);
   });
-  feedback.textContent = record.count > 0 && record.lastCorrect === false
-    ? `Your previous selection was incorrect. ${limited ? `${limit - record.count} attempt(s) remain.` : "You may try again."}`
+
+  feedback.textContent = submitted
+    ? (record.lastCorrect
+        ? "Correct — your selected option is marked green."
+        : canRevealKey
+          ? "Not correct — your selected option is marked red. Reveal the answer to see the correct option."
+          : "Not correct — your selected option is marked red. The correct option is not available at this access level.")
     : "Select exactly one option.";
-  feedback.classList.remove("is-error");
   answerForm.hidden = false;
 }
+
 function renderSolutionPanel() {
   if (!currentQuestion) return;
   const locked = document.getElementById("solution-locked");
   const content = document.getElementById("solution-unlocked");
+  const answerBlock = document.getElementById("solution-answer-wrap");
+  const explanationBlock = document.getElementById("solution-explanation-wrap");
   const explanation = document.getElementById("solution-explanation");
   const detailLocked = document.getElementById("solution-detail-locked");
-  const user = auth.getCurrentUser();
+  const answerButton = document.getElementById("reveal-answer-button");
+  const explanationButton = document.getElementById("reveal-explanation-button");
   const canAnswerKey = canViewAnswer(currentQuestion);
   const canExplain = canViewExplanation(currentQuestion);
+  const user = auth.getCurrentUser();
 
-  if (!canAnswerKey) {
+  answerButton.hidden = !canAnswerKey;
+  explanationButton.hidden = !canExplain;
+  answerButton.textContent = answerRevealed ? "Hide answer" : "Show answer";
+  explanationButton.textContent = explanationRevealed ? "Hide explanation" : "Show explanation";
+  answerButton.setAttribute("aria-expanded", String(answerRevealed && canAnswerKey));
+  explanationButton.setAttribute("aria-expanded", String(explanationRevealed && canExplain));
+
+  if (!canAnswerKey && !canExplain) {
     locked.hidden = false;
-    content.hidden = true;
     if (!user) {
-      locked.textContent = "Sign in with a free REG account to unlock the answer access assigned to this difficulty level.";
+      locked.textContent = "Sign in with a free REG account to answer questions rated 3 stars or higher. The answer and explanation will follow the access rules for this difficulty.";
     } else {
-      locked.textContent = "REG accounts can submit answers here and receive correctness feedback, but the reference answer and worked explanation are reserved for VIP members.";
+      locked.textContent = "Your submission is graded for correctness only at this level. The reference answer and worked explanation are reserved for VIP members.";
     }
-    return;
+  } else if (canAnswerKey && !canExplain) {
+    locked.hidden = false;
+    locked.textContent = "REG accounts may reveal the reference answer at this level. The worked explanation is reserved for VIP members.";
+  } else {
+    locked.hidden = true;
+    locked.textContent = "";
   }
 
-  locked.hidden = true;
-  content.hidden = false;
-  const index = currentQuestion.correctIndex;
-  document.getElementById("solution-correct-label").textContent = `Reference answer: ${String.fromCharCode(65 + index)} — ${currentQuestion.choices[index]}`;
-  explanation.hidden = !canExplain;
-  detailLocked.hidden = canExplain;
-  if (canExplain) {
+  content.hidden = !((answerRevealed && canAnswerKey) || (explanationRevealed && canExplain));
+  answerBlock.hidden = !(answerRevealed && canAnswerKey);
+  explanationBlock.hidden = !(explanationRevealed && canExplain);
+  detailLocked.hidden = true;
+  if (answerRevealed && canAnswerKey) {
+    if (currentQuestion.answerMode === "short") {
+      document.getElementById("solution-correct-label").textContent = `Reference answer: ${formatShortAnswerKey(currentQuestion)}`;
+    } else {
+      const index = currentQuestion.correctIndex;
+      document.getElementById("solution-correct-label").textContent = `Reference answer: ${String.fromCharCode(65 + index)} — ${currentQuestion.choices[index]}`;
+    }
+  } else {
+    document.getElementById("solution-correct-label").textContent = "";
+  }
+  if (explanationRevealed && canExplain) {
     explanation.textContent = currentQuestion.explanation;
   } else {
-    detailLocked.textContent = "The answer option is available to REG accounts. The worked explanation is reserved for VIP members.";
+    explanation.textContent = "";
   }
+  if (detailLocked) detailLocked.textContent = "";
 }
 
 function renderRectangleDiagram() {
@@ -397,11 +788,15 @@ function renderRectangleDiagram() {
 
 function openQuestion(question) {
   currentQuestion = question;
+  answerRevealed = false;
+  explanationRevealed = false;
   document.getElementById("question-detail-code").textContent = question.code;
   document.getElementById("question-detail-title").textContent = question.title;
   document.getElementById("question-detail-description").textContent = question.description;
   document.getElementById("question-detail-source").textContent = question.source;
   document.getElementById("question-answer-tier").textContent = tierLabel(answerAccessRequirement(question));
+  document.getElementById("answer-heading").textContent = question.answerMode === "short" ? "Enter your answer" : "Choose one option";
+  document.querySelector(".answer-private-label").textContent = question.answerMode === "short" ? "Written response" : "A–E · One answer only";
   const meta = document.getElementById("detail-meta");
   meta.replaceChildren();
   meta.append(
@@ -417,7 +812,9 @@ function openQuestion(question) {
   diagram.hidden = true;
   diagram.replaceChildren();
   if (question.diagram === "rectangle-moving-point") renderRectangleDiagram();
-  document.getElementById("question-choices").hidden = true;
+  const choiceArea = document.getElementById("question-choices");
+  choiceArea.hidden = true;
+  choiceArea.replaceChildren();
   document.getElementById("question-modal").hidden = false;
   document.body.classList.add("modal-open");
   renderAnswerPanel();
@@ -437,31 +834,64 @@ function closeQuestion() {
 document.getElementById("question-close").addEventListener("click", closeQuestion);
 document.getElementById("question-detail-done").addEventListener("click", closeQuestion);
 document.getElementById("question-modal").addEventListener("click", event => { if (event.target === event.currentTarget) closeQuestion(); });
-document.addEventListener("keydown", event => { if (event.key === "Escape" && !document.getElementById("question-modal").hidden) closeQuestion(); });
+document.addEventListener("keydown", event => {
+  if (event.key !== "Escape") return;
+  if (!document.getElementById("pumpkin-modal").hidden) closePumpkinChallenge();
+  else if (!document.getElementById("question-modal").hidden) closeQuestion();
+  else if (!document.getElementById("dashboard-modal").hidden) closeDashboard();
+});
 document.getElementById("question-login-button").addEventListener("click", () => auth.open("login"));
+document.getElementById("reveal-answer-button").addEventListener("click", () => {
+  if (!currentQuestion || !canViewAnswer(currentQuestion)) return;
+  answerRevealed = !answerRevealed;
+  renderSolutionPanel();
+  renderAnswerPanel();
+});
+document.getElementById("reveal-explanation-button").addEventListener("click", () => {
+  if (!currentQuestion || !canViewExplanation(currentQuestion)) return;
+  explanationRevealed = !explanationRevealed;
+  renderSolutionPanel();
+});
 document.querySelector(".question-content-section").addEventListener("contextmenu", event => event.preventDefault());
 
 document.getElementById("answer-form").addEventListener("submit", event => {
   event.preventDefault();
   if (!currentQuestion || !canSubmitAnswer(currentQuestion)) { renderAnswerPanel(); return; }
-  const selected = document.querySelector('input[name="selected-answer"]:checked');
   const feedback = document.getElementById("answer-feedback");
-  if (!selected) {
-    feedback.textContent = "Please choose one of the five options before submitting.";
-    feedback.classList.add("is-error");
-    return;
-  }
   const previous = getAttemptRecord(currentQuestion);
   const limit = attemptLimit(currentQuestion);
   if (Number.isFinite(limit) && (previous.correct || previous.count >= limit)) {
     renderAnswerPanel();
     return;
   }
-  const selectedIndex = Number(selected.value);
-  const isCorrect = selectedIndex === currentQuestion.correctIndex;
+
+  let isCorrect = false;
+  let selectedIndex = null;
+  let answerText = null;
+  if (currentQuestion.answerMode === "short") {
+    const inputs = [...document.querySelectorAll("#answer-short-fields input[data-field-index]")];
+    answerText = inputs.map(input => input.value.trim());
+    if (answerText.some(value => !value)) {
+      feedback.textContent = "Please complete every answer field.";
+      feedback.classList.add("is-error");
+      return;
+    }
+    isCorrect = checkShortAnswer(currentQuestion, answerText);
+  } else {
+    const selected = document.querySelector('input[name="selected-answer"]:checked');
+    if (!selected) {
+      feedback.textContent = "Please choose one of the five options before submitting.";
+      feedback.classList.add("is-error");
+      return;
+    }
+    selectedIndex = Number(selected.value);
+    isCorrect = selectedIndex === currentQuestion.correctIndex;
+  }
+
   const nextRecord = {
     count: previous.count + 1,
     selected: selectedIndex,
+    answerText,
     correct: isCorrect,
     lastCorrect: isCorrect,
     updatedAt: new Date().toISOString()
@@ -470,11 +900,17 @@ document.getElementById("answer-form").addEventListener("submit", event => {
     writeAttemptRecord(currentQuestion, nextRecord);
     renderAnswerPanel();
     renderSolutionPanel();
+    renderDashboardPanel();
     const status = document.getElementById("answer-attempt-status");
     const remaining = Number.isFinite(limit) ? Math.max(0, limit - nextRecord.count) : null;
     status.textContent = isCorrect
       ? `Correct — well done. ${Number.isFinite(limit) ? `You used ${nextRecord.count} of ${limit} permitted attempt(s).` : "You may continue practising."}`
       : `Not correct. ${Number.isFinite(limit) ? (remaining > 0 ? `${remaining} attempt(s) remaining.` : "No attempts remaining for this question.") : "You may try again."}`;
+    feedback.textContent = isCorrect
+      ? "Correct — your selected option is marked green."
+      : canViewAnswer(currentQuestion)
+        ? "Not correct — your selected option is marked red. Reveal the answer to see the correct option."
+        : "Not correct — your selected option is marked red. The correct option is not available at this access level.";
   } catch {
     feedback.textContent = "Your browser could not save this attempt. Check available site storage.";
     feedback.classList.add("is-error");
@@ -508,6 +944,7 @@ async function initializeQuestionLibrary() {
     isIndexReady = true;
     renderTopicFilters();
     refreshQuestionList();
+    renderDashboardPanel();
   } catch (error) {
     libraryCount.textContent = "LIBRARY ERROR";
     emptyLibrary.hidden = false;
@@ -520,3 +957,8 @@ async function initializeQuestionLibrary() {
 
 renderStory(0);
 initializeQuestionLibrary();
+appReady = true;
+if (auth.getCurrentUser()) claimGuestPumpkinTrophy(auth.getCurrentUser());
+renderPumpkinTrophyState();
+renderDashboardPanel();
+renderTitlesPanel();

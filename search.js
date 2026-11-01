@@ -2,19 +2,28 @@
 const INDEX_URL = new URL("./question/questions.json", import.meta.url);
 
 function isValidQuestion(item) {
-  return Boolean(item &&
-    typeof item.id === "string" &&
-    typeof item.code === "string" &&
-    typeof item.title === "string" &&
-    typeof item.description === "string" &&
-    typeof item.prompt === "string" &&
-    Array.isArray(item.topics) && item.topics.every(topic => typeof topic === "string") &&
-    ["normal", "acc", "vip"].includes(item.accessTier) &&
-    Number.isInteger(item.difficulty) && item.difficulty >= 1 && item.difficulty <= 7 &&
-    typeof item.source === "string" &&
-    Array.isArray(item.choices) && item.choices.length === 5 && item.choices.every(choice => typeof choice === "string") &&
-    Number.isInteger(item.correctIndex) && item.correctIndex >= 0 && item.correctIndex < 5 &&
-    typeof item.explanation === "string" && item.explanation.length > 0);
+  if (!item || typeof item.id !== "string" || typeof item.code !== "string" ||
+      typeof item.title !== "string" || typeof item.description !== "string" ||
+      typeof item.prompt !== "string" || !Array.isArray(item.topics) ||
+      !item.topics.every(topic => typeof topic === "string") ||
+      !["normal", "acc", "vip"].includes(item.accessTier) ||
+      !Number.isInteger(item.difficulty) || item.difficulty < 1 || item.difficulty > 7 ||
+      typeof item.source !== "string" || typeof item.explanation !== "string" || !item.explanation.length) return false;
+
+  const mode = item.answerMode || "choice";
+  if (mode === "choice") {
+    return Array.isArray(item.choices) && item.choices.length === 5 &&
+      item.choices.every(choice => typeof choice === "string") &&
+      Number.isInteger(item.correctIndex) && item.correctIndex >= 0 && item.correctIndex < 5;
+  }
+  if (mode === "short") {
+    return Array.isArray(item.answerFields) && item.answerFields.length > 0 &&
+      item.answerFields.every(field => field && typeof field.label === "string" &&
+        Array.isArray(field.accepted) && field.accepted.length > 0 &&
+        field.accepted.every(value => typeof value === "string") &&
+        typeof field.display === "string");
+  }
+  return false;
 }
 
 export async function loadQuestions() {
@@ -36,7 +45,7 @@ export function searchQuestions(questions, { query = "", topic = "all", difficul
     if (difficulty !== "all" && question.difficulty !== Number(difficulty)) return false;
     if (access !== "all" && question.accessTier !== access) return false;
     if (!words.length) return true;
-    const searchable = [question.code, question.title, question.description, question.prompt, question.source, ...(question.choices || []), ...question.topics]
+    const searchable = [question.code, question.title, question.description, question.prompt, question.source, ...(question.choices || []), ...(question.answerFields || []).map(field => field.label), ...question.topics]
       .join(" ").toLocaleLowerCase();
     return words.every(word => searchable.includes(word));
   });

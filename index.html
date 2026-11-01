@@ -63,17 +63,6 @@
 
     <div class="workspace">
       <aside class="sidebar">
-        <div class="sidebar-main">
-          <p class="sidebar-eyebrow">YOUR NEXT STEP</p>
-          <h2>Make every question count.</h2>
-          <p class="sidebar-hint">Want to find questions that fit you? Sign in to save your interests and build your own study space.</p>
-          <div class="sidebar-rule"></div>
-          <div class="sidebar-note">
-            <span class="note-icon" aria-hidden="true">✳</span>
-            <p>Curiosity grows when you give it your attention.</p>
-          </div>
-        </div>
-
         <div id="sidebar-guest" class="sidebar-account">
           <div class="account-prompt">
             <span class="account-avatar" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7 8a7 7 0 0 1 14 0"/></svg></span>
@@ -86,12 +75,32 @@
           <div class="signed-in-label"><i></i> SIGNED IN</div>
           <div class="account-prompt">
             <span class="account-avatar account-avatar-user" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7 8a7 7 0 0 1 14 0"/></svg></span>
-            <span><strong id="account-name">Student</strong><small id="account-role">Member</small></span>
+            <span class="account-copy">
+              <span class="account-name-line">
+                <strong id="account-name">Student</strong>
+                <span id="sidebar-equipped-title" class="equipped-title-badge" hidden>
+                  <img id="sidebar-equipped-title-image" alt="Equipped player title" hidden>
+                  <span id="sidebar-equipped-title-fallback"></span>
+                </span>
+              </span>
+              <small id="account-role">Member</small>
+            </span>
           </div>
           <button id="open-dashboard" class="button button-dark button-wide" type="button">Personal dashboard <span aria-hidden="true">↗</span></button>
           <button id="logout-button" class="text-button logout-button" type="button">Log out</button>
         </div>
-        <div class="sidebar-footer">ATTENTION <span>•</span> VERSION 0.5</div>
+        <div class="sidebar-main">
+          <p class="sidebar-eyebrow">YOUR NEXT STEP</p>
+          <h2>Make every question count.</h2>
+          <p class="sidebar-hint">Want to find questions that fit you? Sign in to save your interests and build your own study space.</p>
+          <div class="sidebar-rule"></div>
+          <div class="sidebar-note">
+            <span class="note-icon" aria-hidden="true">✳</span>
+            <p>Curiosity grows when you give it your attention.</p>
+          </div>
+        </div>
+
+        <div class="sidebar-footer">ATTENTION <span>•</span> VERSION 0.9</div>
       </aside>
 
       <main class="main-content">
@@ -115,10 +124,10 @@
                     <strong>Question access</strong>
                     <p>All question statements are open to visitors.</p>
                     <strong>Answers & explanations</strong>
-                    <p><b>1–2 stars</b> — everyone can answer and read the explanation.</p>
-                    <p><b>3–4 stars</b> — sign in to answer and unlock the answer and explanation.</p>
-                    <p><b>5 stars</b> — REG can see the answer; VIP can also read the explanation.</p>
-                    <p><b>6–7 stars</b> — REG receives correctness feedback only; VIP can see the answer and explanation.</p>
+                    <p><b>1–2 stars</b> — visitors, REG accounts, and VIPs can answer; everyone may reveal the answer and explanation.</p>
+                    <p><b>3–4 stars</b> — sign in with a REG account or VIP account to answer and reveal both.</p>
+                    <p><b>5 stars</b> — REG can reveal the answer; only VIP can reveal the explanation.</p>
+                    <p><b>6–7 stars</b> — REG receives correctness feedback only; VIP can reveal the answer and explanation.</p>
                     <strong>Attempt limits</strong>
                     <p>4–6 stars: two attempts per question. 7 stars: one attempt. Other levels have no fixed attempt limit.</p>
                   </div>
@@ -126,8 +135,11 @@
                 <button id="clear-filters" class="clear-filters" type="button">Clear filters</button>
               </div>
             </div>
-            <div id="topic-filters" class="topic-filters" aria-label="Mathematics topic filters">
-              <button class="topic-chip is-active" type="button" data-topic="all" aria-pressed="true">All topics</button>
+            <div class="topic-filter-control-row">
+              <div id="topic-filters" class="topic-filters" aria-label="Mathematics topic filters">
+                <button class="topic-chip is-active" type="button" data-topic="all" aria-pressed="true">All topics</button>
+              </div>
+              <button id="more-topics-toggle" class="more-topics-toggle" type="button" aria-expanded="false">More topics <span aria-hidden="true">⌄</span></button>
             </div>
           </section>
 
@@ -136,6 +148,10 @@
             <input id="search-input" type="search" name="q" autocomplete="off" placeholder="Search topics, concepts, or question keywords..." aria-label="Search mathematics questions">
             <button class="search-button" type="submit">Search <span aria-hidden="true">↗</span></button>
           </form>
+          <aside class="easter-egg-hint" aria-label="Halloween hint">
+            <span class="easter-egg-hint-icon" aria-hidden="true">✦</span>
+            <p><strong>A little Halloween secret is waiting.</strong> Find the single pumpkin at the bottom centre and click it to open a hidden challenge.</p>
+          </aside>
           <div class="secondary-filters" aria-label="Additional filters">
             <label>Access
               <select id="access-filter">
@@ -185,6 +201,10 @@
         </div>
       </main>
     </div>
+    <button id="pumpkin-challenge-button" class="pumpkin-float-button" type="button" aria-label="Open the hidden Halloween math challenge" title="A hidden math challenge">
+      <span aria-hidden="true">🎃</span>
+      <span class="pumpkin-float-spark" aria-hidden="true">✦</span>
+    </button>
   </div>
 
   <!-- Login and registration modal -->
@@ -281,13 +301,14 @@
           <button id="question-login-button" class="button button-dark" type="button">Log in to answer <span aria-hidden="true">→</span></button>
         </div>
         <form id="answer-form" class="answer-form" hidden>
-          <fieldset class="answer-options-fieldset">
+          <fieldset id="answer-choices-fieldset" class="answer-options-fieldset">
             <legend>Select exactly one answer:</legend>
             <div id="answer-option-list" class="answer-option-list"></div>
           </fieldset>
+          <div id="answer-short-fields" class="answer-short-fields" hidden></div>
           <div class="answer-form-footer">
             <p id="answer-feedback" class="answer-feedback" role="status" aria-live="polite"></p>
-            <button class="button button-primary" type="submit">Submit answer <span aria-hidden="true">✓</span></button>
+            <button id="submit-answer-button" class="button button-primary" type="submit">Submit answer <span aria-hidden="true">✓</span></button>
           </div>
         </form>
         <p id="answer-attempt-status" class="answer-attempt-status" role="status" aria-live="polite"></p>
@@ -299,12 +320,20 @@
             <p class="section-eyebrow">OFFICIAL SOLUTION</p>
             <h3 id="solution-heading">Answer & explanation</h3>
           </div>
-          <span class="answer-private-label">Membership access</span>
+          <span class="answer-private-label">Reveal controls follow your access level</span>
         </div>
-        <div id="solution-locked" class="solution-locked"></div>
+        <div id="solution-locked" class="solution-locked" hidden></div>
+        <div class="solution-reveal-controls" aria-label="Answer and explanation controls">
+          <button id="reveal-answer-button" class="button button-reveal" type="button" aria-controls="solution-answer-wrap" aria-expanded="false" hidden>Show answer</button>
+          <button id="reveal-explanation-button" class="button button-reveal" type="button" aria-controls="solution-explanation-wrap" aria-expanded="false" hidden>Show explanation</button>
+        </div>
         <div id="solution-unlocked" class="solution-unlocked" hidden>
-          <p id="solution-correct-label" class="solution-correct-label"></p>
-          <p id="solution-explanation" class="solution-explanation"></p>
+          <div id="solution-answer-wrap" class="solution-answer-wrap" hidden>
+            <p id="solution-correct-label" class="solution-correct-label"></p>
+          </div>
+          <div id="solution-explanation-wrap" class="solution-explanation-wrap" hidden>
+            <p id="solution-explanation" class="solution-explanation"></p>
+          </div>
           <p id="solution-detail-locked" class="solution-detail-locked" hidden></p>
         </div>
       </section>
@@ -315,16 +344,131 @@
     </article>
   </section>
 
-  <!-- Personal dashboard placeholder -->
-  <section id="dashboard-modal" class="modal-backdrop" hidden aria-labelledby="dashboard-heading" aria-modal="true" role="dialog">
-    <div class="modal-card dashboard-card">
-      <button class="modal-close" id="dashboard-close" type="button" aria-label="Close">×</button>
-      <p class="section-eyebrow">YOUR PERSONAL SPACE</p>
-      <h2 id="dashboard-heading">Personal dashboard</h2>
-      <div class="dashboard-empty-icon" aria-hidden="true">⌁</div>
-      <h3>Nothing here just yet.</h3>
-      <p class="modal-intro">Your dashboard is being prepared. Saved questions and personal progress can live here in a future version.</p>
-      <button id="dashboard-done" class="button button-primary button-wide" type="button">Back to Attention</button>
+  <!-- Dedicated personal dashboard page -->
+  <section id="dashboard-modal" class="dashboard-page" hidden aria-labelledby="dashboard-heading" aria-modal="true" role="dialog">
+    <div class="dashboard-shell">
+      <aside class="dashboard-sidebar">
+        <div class="dashboard-side-brand">
+          <img src="assets/logo.png" alt="Attention logo">
+          <span>汤逊数学<small>PERSONAL SPACE</small></span>
+        </div>
+        <p class="dashboard-side-label">MY SPACE</p>
+        <nav class="dashboard-nav" aria-label="Personal dashboard navigation">
+          <button class="dashboard-nav-item is-active" type="button" data-dashboard-view="problems"><span aria-hidden="true">▤</span> My Problems</button>
+          <button class="dashboard-nav-item" type="button" data-dashboard-view="honors"><span aria-hidden="true">🏆</span> Honors</button>
+          <button class="dashboard-nav-item" type="button" data-dashboard-view="titles"><span aria-hidden="true">✧</span> Titles</button>
+          <button class="dashboard-nav-item" type="button" data-dashboard-view="ranks"><span aria-hidden="true">◆</span> Rank Rules</button>
+        </nav>
+        <button id="dashboard-done" class="dashboard-back-button" type="button">← Back to Attention</button>
+      </aside>
+      <main class="dashboard-main-panel">
+        <header class="dashboard-main-header">
+          <div><p class="section-eyebrow">YOUR PERSONAL SPACE</p><h2 id="dashboard-heading">My Problems</h2></div>
+          <button class="dashboard-header-close" id="dashboard-close" type="button" aria-label="Close dashboard">×</button>
+        </header>
+
+        <section id="dashboard-view-problems" class="dashboard-view" aria-labelledby="dashboard-problems-title">
+          <div class="dashboard-intro-card"><span class="dashboard-intro-icon" aria-hidden="true">✎</span><div><h3 id="dashboard-problems-title">Questions you've worked on</h3><p>Your answer history is saved in this browser for this account.</p></div></div>
+          <div id="dashboard-problems-list" class="dashboard-problems-list"></div>
+          <div id="dashboard-problems-empty" class="dashboard-empty-state"><span aria-hidden="true">∑</span><h3>No attempted questions yet.</h3><p>When you submit an answer, your activity will appear here.</p></div>
+        </section>
+
+        <section id="dashboard-view-honors" class="dashboard-view" hidden aria-labelledby="dashboard-honors-title">
+          <div class="rank-status-card">
+            <div><p class="section-eyebrow">YOUR CURRENT RANK</p><h3 id="dashboard-honors-title">Current Rank</h3><p class="rank-description">Black Iron is the default starting rank. Ranked matches are not open yet.</p></div>
+            <div class="rank-current"><small>CURRENT RANK</small><strong id="dashboard-current-rank">Black Iron</strong></div>
+          </div>
+          <div class="honors-heading"><div><p class="section-eyebrow">MILESTONES & REWARDS</p><h3>Your Trophies</h3></div><span id="trophy-count" class="trophy-count">0 UNLOCKED</span></div>
+          <div class="trophy-grid">
+            <article id="pumpkin-trophy-card" class="trophy-card is-locked">
+              <div class="honor-trophy-image-wrap">
+                <img id="honors-pumpkin-trophy" src="assets/pumpkin_trophy.png" hidden alt="Pumpkin commemorative trophy">
+                <span id="honors-pumpkin-trophy-fallback" class="trophy-fallback" aria-hidden="true">🎃</span>
+              </div>
+              <h4>Pumpkin Learner</h4>
+              <p id="honors-pumpkin-description">Solve the hidden Halloween challenge to unlock this commemorative trophy.</p>
+              <span id="honors-pumpkin-status" class="trophy-state-label">LOCKED</span>
+            </article>
+          </div>
+        </section>
+
+        <section id="dashboard-view-titles" class="dashboard-view titles-view" hidden aria-labelledby="dashboard-titles-title">
+          <div class="titles-intro-card">
+            <div><p class="section-eyebrow">PLAYER IDENTITY</p><h3 id="dashboard-titles-title">Your titles</h3><p>Unlock title emblems through special achievements. Equip one title to display it beside your name in the lobby.</p></div>
+          </div>
+          <div class="title-card-grid">
+            <article class="player-title-card is-locked" id="title-card-halloween">
+              <div class="title-art-wrap"><img id="title-image-halloween" src="assets/title_halloween.png" alt="Halloween title emblem" hidden><span id="title-fallback-halloween" class="title-art-fallback">HALLOWEEN</span><span class="title-lock-overlay" id="title-lock-halloween" aria-label="Locked">🔒</span></div>
+              <div class="player-title-copy"><h4>Halloween</h4><p id="title-description-halloween">Unlock the Pumpkin Learner trophy to earn this title.</p><span id="title-status-halloween" class="player-title-status">LOCKED</span></div>
+              <button type="button" class="button button-primary title-equip-button" data-equip-title="halloween" id="title-equip-halloween" disabled>Equip</button>
+            </article>
+            <article class="player-title-card is-locked" id="title-card-expert">
+              <div class="title-art-wrap"><img id="title-image-expert" src="assets/title_expert.png" alt="Expert title emblem" hidden><span id="title-fallback-expert" class="title-art-fallback">高手</span><span class="title-lock-overlay" id="title-lock-expert" aria-label="Locked">🔒</span></div>
+              <div class="player-title-copy"><h4>高手</h4><p id="title-description-expert">Unlock after reaching 30 ranked stars. Ranked play is not open yet.</p><span id="title-status-expert" class="player-title-status">LOCKED</span></div>
+              <button type="button" class="button button-primary title-equip-button" data-equip-title="expert" id="title-equip-expert" disabled>Equip</button>
+            </article>
+            <article class="player-title-card is-locked" id="title-card-strongest-brain">
+              <div class="title-art-wrap"><img id="title-image-strongest-brain" src="assets/title_strongest_brain.png" alt="Strongest Brain title emblem" hidden><span id="title-fallback-strongest-brain" class="title-art-fallback">最强大脑</span><span class="title-lock-overlay" id="title-lock-strongest-brain" aria-label="Locked">🔒</span></div>
+              <div class="player-title-copy"><h4>最强大脑</h4><p id="title-description-strongest-brain">50 ranked stars · Under development and not obtainable yet.</p><span id="title-status-strongest-brain" class="player-title-status">IN DEVELOPMENT</span></div>
+              <button type="button" class="button button-primary title-equip-button" data-equip-title="strongest-brain" id="title-equip-strongest-brain" disabled>Not available</button>
+            </article>
+          </div>
+          <p class="titles-footnote">Only an unlocked and equipped title appears beside your username. If you have not equipped a title, your player name remains unchanged.</p>
+        </section>
+
+        <section id="dashboard-view-ranks" class="dashboard-view rank-rules-view" hidden aria-labelledby="dashboard-rules-title">
+          <div class="rank-rules-intro">
+            <div><p class="section-eyebrow">RANK SYSTEM</p><h3 id="dashboard-rules-title">Rank rules</h3><p>Stars are the future ranked-play currency. For now, you can read the rules, but ranked matches and the hidden question bank are not accessible.</p></div>
+            <span class="rank-coming-soon">RANKED PLAY · COMING SOON</span>
+          </div>
+          <div class="rank-tier-list">
+            <article class="rank-tier-card is-current"><span class="rank-tier-mark">Ⅰ</span><div><strong>Black Iron · 黑铁</strong><small>Starting rank for every new account</small></div><span class="rank-tier-requirement">Default</span></article>
+            <article class="rank-tier-card"><span class="rank-tier-mark">Ⅱ</span><div><strong>Bronze · 青铜</strong><small>Reach 1 star</small></div><span class="rank-tier-requirement">1 star</span></article>
+            <article class="rank-tier-card"><span class="rank-tier-mark">Ⅲ</span><div><strong>Silver · 白银</strong><small>Reach 4 stars</small></div><span class="rank-tier-requirement">4 stars</span></article>
+            <article class="rank-tier-card"><span class="rank-tier-mark">Ⅳ</span><div><strong>Gold · 黄金</strong><small>Reach 8 stars</small></div><span class="rank-tier-requirement">8 stars</span></article>
+            <article class="rank-tier-card"><span class="rank-tier-mark">Ⅴ</span><div><strong>Platinum · 铂金</strong><small>Reach 12 stars</small></div><span class="rank-tier-requirement">12 stars</span></article>
+            <article class="rank-tier-card"><span class="rank-tier-mark">Ⅵ</span><div><strong>Diamond · 钻石</strong><small>Reach 18 stars</small></div><span class="rank-tier-requirement">18 stars</span></article>
+            <article class="rank-tier-card"><span class="rank-tier-mark">Ⅶ</span><div><strong>神算</strong><small>Reach 24 stars</small></div><span class="rank-tier-requirement">24 stars</span></article>
+            <article class="rank-tier-card"><span class="rank-tier-mark">Ⅷ</span><div><strong>高手</strong><small>Reach 30 stars</small></div><span class="rank-tier-requirement">30 stars</span></article>
+            <article class="rank-tier-card rank-tier-ultimate">
+              <div class="ultimate-rank-image-wrap"><img id="strongest-brain-rank-image" src="assets/rank_strongest_brain.png" hidden alt="Strongest Brain rank emblem"><span id="strongest-brain-rank-fallback" aria-hidden="true">✦</span></div>
+              <div><strong>最强大脑 · Strongest Brain</strong><small>50 stars · Under development, not obtainable yet</small><small>After release, each additional star will display as “最强大脑 N 星”.</small></div>
+              <span class="rank-tier-requirement">50 stars</span>
+            </article>
+          </div>
+          <p class="rank-rules-footnote">The ranked challenge bank contains one hidden two-star question, but it is intentionally unavailable until ranked play is released.</p>
+        </section>
+      </main>
+    </div>
+  </section>
+
+  <!-- Halloween numeric challenge: open to guests, REG accounts, and VIPs -->
+  <section id="pumpkin-modal" class="modal-backdrop pumpkin-backdrop" hidden aria-labelledby="pumpkin-challenge-title" aria-modal="true" role="dialog">
+    <div class="modal-card pumpkin-challenge-card">
+      <button id="pumpkin-challenge-close" class="modal-close" type="button" aria-label="Close challenge">×</button>
+      <div class="pumpkin-modal-icon" aria-hidden="true">🎃</div>
+      <p class="section-eyebrow">HALLOWEEN SPECIAL · 04/07</p>
+      <h2 id="pumpkin-challenge-title">The Perfect-Square Trophy</h2>
+      <p class="modal-intro">A special four-star number theory challenge. Everyone can try it — no account or membership required.</p>
+      <div class="pumpkin-challenge-prompt">
+        <p>Find the smallest perfect square greater than 1 that has exactly 15 positive divisors.</p>
+        <p class="numeric-answer-note">Enter the number only (fewer than four digits).</p>
+      </div>
+      <details class="challenge-hint-details">
+        <summary>Reveal a small hint</summary>
+        <p>The target is between 100 and 200. Think about how prime exponents determine the number of positive divisors of a square.</p>
+      </details>
+      <form id="pumpkin-answer-form" class="pumpkin-answer-form">
+        <label for="pumpkin-numeric-answer">Your numerical answer</label>
+        <input id="pumpkin-numeric-answer" name="answer" type="number" inputmode="numeric" min="0" max="9999" step="1" placeholder="Enter a number" required>
+        <button class="button button-primary button-wide" type="submit">Submit answer <span aria-hidden="true">✓</span></button>
+      </form>
+      <p id="pumpkin-challenge-feedback" class="form-message pumpkin-feedback" role="status" aria-live="polite">Solve it correctly to earn the Pumpkin Learner trophy.</p>
+      <div id="pumpkin-challenge-award" class="pumpkin-challenge-award" hidden>
+        <div class="challenge-award-image-wrap"><img id="challenge-pumpkin-trophy" src="assets/pumpkin_trophy.png" hidden alt="Pumpkin commemorative trophy"><span id="challenge-pumpkin-trophy-fallback" class="trophy-fallback" aria-hidden="true">🎃</span></div>
+        <div><strong>Pumpkin Learner unlocked!</strong><small>Your trophy has been added to Honors on this browser account.</small></div>
+      </div>
+      <button id="pumpkin-view-honors" class="text-button pumpkin-view-honors" type="button">View your Honors page →</button>
     </div>
   </section>
 </body>

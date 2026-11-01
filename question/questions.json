@@ -1,5 +1,5 @@
 {
-  "version": 5,
+  "version": "0.7",
   "questions": [
     {
       "id": "rectangle-perpendicular-distance-001",
@@ -990,6 +990,263 @@
       "explanation": "Every path consists of 4 northeast steps and 7 northwest steps, so there are C(11,4)=330 paths. For each path, the areas on its left and right add to the full 4×7 grid area, 28. Reflection pairs paths and swaps left and right areas, so the total sum of right-side areas equals the total sum of left-side areas. Therefore twice the required sum is 330×28, and the answer is 330×14=4620.",
       "accessTier": "normal",
       "answerTier": "vip",
+      "submissionTier": "reg",
+      "explanationTier": "vip",
+      "maxAttempts": 2
+    },
+    {
+      "id": "amc8-2026-adapted-q1-miguel-and-luna",
+      "code": "AMC 8 2026 · Q1",
+      "title": "Miguel, Luna, and the Ball",
+      "description": "A relative-speed problem with two stages of motion.",
+      "topics": [
+        "Algebra",
+        "Rates",
+        "Relative Motion",
+        "Fractions"
+      ],
+      "accessTier": "normal",
+      "difficulty": 3,
+      "source": "AMC 8 2026 (adapted)",
+      "answerTier": "reg",
+      "answerMode": "short",
+      "prompt": "Miguel walks at a steady pace from a park entrance toward a tree that is 120 m away. At the entrance he throws a ball, and it stops at the tree. His dog Luna runs 7 times as fast as Miguel walks. She runs to the ball, then straight back to Miguel.\n\n(a) What fraction of the 120 m has Miguel walked when Luna gets back to him?\n\n(b) How far did Luna run in total? Give your answer in metres.",
+      "answerFields": [
+        {
+          "label": "(a) Fraction of the 120 m",
+          "placeholder": "For example: 1/4",
+          "accepted": [
+            "1/4",
+            "0.25"
+          ],
+          "display": "1/4"
+        },
+        {
+          "label": "(b) Total distance Luna ran (metres)",
+          "placeholder": "Enter a whole number",
+          "accepted": [
+            "210"
+          ],
+          "display": "210 m"
+        }
+      ],
+      "explanation": "Let Miguel’s walking speed be v. Luna first runs 120 m to the tree, taking 120/(7v). During that time Miguel walks 120/7 m. On the return trip, Luna and Miguel move toward each other, so their closing speed is 7v+v=8v. Their separation is 120−120/7=720/7 m, so the return takes (720/7)/(8v)=90/(7v). The total time is 30/v, during which Miguel walks 30 m. Thus he has walked 30/120=1/4 of the route. Luna runs 120 m outward and 90 m back, for a total of 210 m.",
+      "choices": [],
+      "correctIndex": null,
+      "submissionTier": "reg",
+      "explanationTier": "reg",
+      "maxAttempts": null
+    },
+    {
+      "id": "amc8-2026-adapted-q2-coin-stack",
+      "code": "AMC 8 2026 · Q2",
+      "title": "Building a 17 mm Coin Stack",
+      "description": "Count ordered compositions using two possible coin thicknesses.",
+      "topics": [
+        "Combinatorics",
+        "Sequences",
+        "Recurrence Relations"
+      ],
+      "accessTier": "normal",
+      "difficulty": 3,
+      "source": "AMC 8 2026 (adapted)",
+      "answerTier": "reg",
+      "answerMode": "short",
+      "prompt": "A coin stack is made of copper coins (2 mm thick) and silver coins (3 mm thick). Order matters. In how many ways can a stack exactly 17 mm tall be made?",
+      "answerFields": [
+        {
+          "label": "Number of possible ordered stacks",
+          "placeholder": "Enter a whole number",
+          "accepted": [
+            "49"
+          ],
+          "display": "49"
+        }
+      ],
+      "explanation": "Let f(n) be the number of ordered stacks with total height n mm. The last coin is either 2 mm or 3 mm thick, so f(n)=f(n−2)+f(n−3), with f(0)=1 and f(1)=0. Evaluating upward gives f(17)=f(15)+f(14)=28+21=49.",
+      "choices": [],
+      "correctIndex": null,
+      "submissionTier": "reg",
+      "explanationTier": "reg",
+      "maxAttempts": null
+    },
+    {
+      "id": "amc8-2026-adapted-q3-elastic-band-coins",
+      "code": "AMC 8 2026 · Q3",
+      "title": "An Elastic Band Around Seven Coins",
+      "description": "Use the perimeter of the convex hull and the rounded corners of a tight band.",
+      "topics": [
+        "Geometry",
+        "Circles",
+        "Perimeter",
+        "Coordinate Geometry"
+      ],
+      "accessTier": "normal",
+      "difficulty": 3,
+      "source": "AMC 8 2026 (adapted)",
+      "answerTier": "reg",
+      "answerMode": "short",
+      "prompt": "Seven round coins, each with radius 5 cm, lie flat on a table: one in the middle and six around it, each touching its neighbours (in three staggered rows of 2, 3, and 2). An elastic band is wrapped tightly around all seven. What is the length of the band? Give an exact answer in terms of π.",
+      "answerFields": [
+        {
+          "label": "Length of the elastic band (cm)",
+          "placeholder": "For example: 60 + 10π",
+          "accepted": [
+            "60+10pi",
+            "10pi+60",
+            "60+10*pi",
+            "10*pi+60"
+          ],
+          "display": "60 + 10π cm"
+        }
+      ],
+      "explanation": "The centres of the six outside coins form a regular hexagon with side length 10 cm, because neighbouring coins touch and each has radius 5 cm. The straight portions of the tight band add up to the hexagon perimeter, 6×10=60 cm. The six rounded corner arcs together make one full circle of radius 5 cm, whose circumference is 2π(5)=10π cm. The total length is 60+10π cm.",
+      "choices": [],
+      "correctIndex": null,
+      "submissionTier": "reg",
+      "explanationTier": "reg",
+      "maxAttempts": null
+    },
+    {
+      "id": "amc8-2026-adapted-q4-even-digits-divisible-by-8",
+      "code": "AMC 8 2026 · Q4",
+      "title": "Even Digits and Divisibility by 8",
+      "description": "Count five-digit numbers by separating the first two digits from the final three.",
+      "topics": [
+        "Number Theory",
+        "Divisibility",
+        "Counting",
+        "Combinatorics"
+      ],
+      "accessTier": "normal",
+      "difficulty": 4,
+      "source": "AMC 8 2026 (adapted)",
+      "answerTier": "reg",
+      "answerMode": "short",
+      "prompt": "Consider all five-digit positive integers whose digits are all even (each digit is 0, 2, 4, 6, or 8). What fraction of them are divisible by 8? Give the fraction in simplest form.",
+      "answerFields": [
+        {
+          "label": "Fraction in simplest form",
+          "placeholder": "For example: 3/10",
+          "accepted": [
+            "8/25",
+            "0.32"
+          ],
+          "display": "8/25"
+        }
+      ],
+      "explanation": "There are 4 choices for the first digit (2, 4, 6, 8), and 5 choices for each of the other four digits, for 4·5⁴ total numbers. Divisibility by 8 depends only on the last three digits. Of the 5³=125 possible triples of even digits, 40 form a number divisible by 8. The first two digits contribute the same factor 4·5 to both counts, so the fraction is 40/125=8/25.",
+      "choices": [],
+      "correctIndex": null,
+      "submissionTier": "reg",
+      "explanationTier": "reg",
+      "maxAttempts": 2
+    },
+    {
+      "id": "amc8-2026-adapted-q5-consecutive-odd-sums",
+      "code": "AMC 8 2026 · Q5",
+      "title": "Writing 360 as Consecutive Odd Sums",
+      "description": "Translate each possible number of terms into a divisor condition.",
+      "topics": [
+        "Number Theory",
+        "Sequences",
+        "Divisibility",
+        "Algebra"
+      ],
+      "accessTier": "normal",
+      "difficulty": 4,
+      "source": "AMC 8 2026 (adapted)",
+      "answerTier": "reg",
+      "answerMode": "short",
+      "prompt": "In how many ways can 360 be written as the sum of two or more consecutive odd positive integers, in increasing order?",
+      "answerFields": [
+        {
+          "label": "Number of representations",
+          "placeholder": "Enter a whole number",
+          "accepted": [
+            "6"
+          ],
+          "display": "6"
+        }
+      ],
+      "explanation": "Suppose there are k terms and the first odd positive term is a. The sum is k(a+(k−1))=360, so a=360/k−k+1. Thus k must divide 360, k≥2, and the resulting a must be a positive odd integer. Checking the divisors of 360 gives k=2, 4, 6, 10, 12, and 18, producing six valid representations.",
+      "choices": [],
+      "correctIndex": null,
+      "submissionTier": "reg",
+      "explanationTier": "reg",
+      "maxAttempts": 2
+    },
+    {
+      "id": "amc8-2026-adapted-q6-row-rearrangements",
+      "code": "AMC 8 2026 · Q6",
+      "title": "Rearranging Five Students",
+      "description": "Count permutations that avoid all four original neighbouring pairs.",
+      "topics": [
+        "Combinatorics",
+        "Permutations",
+        "Inclusion-Exclusion"
+      ],
+      "accessTier": "normal",
+      "difficulty": 5,
+      "source": "AMC 8 2026 (adapted)",
+      "answerTier": "reg",
+      "answerMode": "short",
+      "prompt": "Five students sit in a row in the order 1, 2, 3, 4, 5. They chat with their neighbours, then rearrange so that nobody sits next to anyone they sat next to before. How many rearrangements are possible?",
+      "answerFields": [
+        {
+          "label": "Number of valid rearrangements",
+          "placeholder": "Enter a whole number",
+          "accepted": [
+            "14"
+          ],
+          "display": "14"
+        }
+      ],
+      "explanation": "Use inclusion–exclusion on the four forbidden neighbouring pairs {1,2}, {2,3}, {3,4}, {4,5}. If a selected set of forbidden adjacencies has k edges and c connected runs along this path, the number of permutations containing all of them is (5−k)!·2^c: each run becomes one block, and each block has two orientations. The counts by k are: k=0:120; k=1:192; k=2:108; k=3:24; k=4:2. Therefore the number avoiding every forbidden adjacency is 120−192+108−24+2=14.",
+      "choices": [],
+      "correctIndex": null,
+      "submissionTier": "reg",
+      "explanationTier": "vip",
+      "maxAttempts": 2
+    },
+    {
+      "id": "amc8-2026-adapted-q7-median-of-medians",
+      "code": "AMC 8 2026 · Q7",
+      "title": "The Extreme Median of Seven Group Medians",
+      "description": "Find the smallest and largest possible median of the seven group medians.",
+      "topics": [
+        "Statistics",
+        "Combinatorics",
+        "Optimization",
+        "Order Statistics"
+      ],
+      "accessTier": "normal",
+      "difficulty": 6,
+      "source": "AMC 8 2026 (adapted)",
+      "answerTier": "vip",
+      "answerMode": "short",
+      "prompt": "The integers 1 through 63 are split into 7 groups of 9 numbers each. Let M be the median of the 7 group medians. Find the least and the greatest possible value of M.",
+      "answerFields": [
+        {
+          "label": "Least possible value of M",
+          "placeholder": "Enter an integer",
+          "accepted": [
+            "20"
+          ],
+          "display": "20"
+        },
+        {
+          "label": "Greatest possible value of M",
+          "placeholder": "Enter an integer",
+          "accepted": [
+            "44"
+          ],
+          "display": "44"
+        }
+      ],
+      "explanation": "For M to be at most x, at least four groups must have median at most x. Each such group needs at least five numbers among 1,…,x, so x must be at least 20. This bound is attainable by distributing 1,…,20 as five low numbers into each of four groups, so the minimum is 20. For M to be at least x, at least four groups must have median at least x; each needs five numbers from x,…,63. There are 64−x such numbers, so 64−x≥20 and x≤44. This is attainable by distributing 44,…,63 five to each of four groups, so the maximum is 44.",
+      "choices": [],
+      "correctIndex": null,
       "submissionTier": "reg",
       "explanationTier": "vip",
       "maxAttempts": 2

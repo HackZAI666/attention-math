@@ -1,20 +1,21 @@
 # Attention — Question Catalogue
 
-**Version:** 0.5  
-**Total:** 35 single-answer questions. Each item has five choices (A–E).
+**Version:** 1.0  
+**Public catalogue:** 42 questions (35 five-choice questions from the previous release plus 7 short-answer AMC 8 2026 adapted questions).
+**Private ranked bank:** 1 two-star question in the sibling `../private-developer/hidden-ranked-questions.json`, outside the public site folder.
 
-## Current answer and attempt rules
+## Current answer and attempt rules (v1.0 click-to-reveal behavior)
 
 | Difficulty | Who may answer | Attempts per question | REG can see | VIP can see |
 |---|---|---:|---|---|
 | 1–2 stars | Everyone, including guests | Unlimited | Answer + explanation (public) | Answer + explanation |
 | 3 stars | Signed-in accounts | Unlimited | Answer + explanation | Answer + explanation |
 | 4 stars | Signed-in accounts | 2 | Answer + explanation | Answer + explanation |
-| 5 stars | Signed-in accounts | 2 | Correct answer option only | Answer + explanation |
+| 5 stars | Signed-in accounts | 2 | Correct answer only | Answer + explanation |
 | 6 stars | Signed-in accounts | 2 | Correct / incorrect feedback only | Answer + explanation |
 | 7 stars | Signed-in accounts | 1 | Correct / incorrect feedback only | Answer + explanation |
 
-All question statements and choices are visible to everyone. VIP includes all lower-tier answer and explanation access. The built-in developer account is VIP for testing. Attempt limits and membership checks are front-end prototype logic; they are not tamper-proof and no payment service is connected.
+All question statements are visible to everyone. Anyone may answer 1–2 star questions; any signed-in REG or VIP account may answer every difficulty level. Membership tiers control only answer/explanation visibility. VIP includes all lower-tier answer and explanation access. The built-in developer account is VIP for testing. Attempt limits and membership checks are front-end prototype logic; they are not tamper-proof and no payment service is connected.
 
 ## Catalogue by source
 
@@ -139,4 +140,63 @@ All question statements and choices are visible to everyone. VIP includes all lo
 
 ## Data format
 
-Each record in `questions.json` requires a unique `id`, `code`, `title`, `description`, `source`, `topics`, `difficulty` (1–7), `prompt`, exactly five `choices`, `correctIndex` (A=0 through E=4), and `explanation`. The access fields `submissionTier`, `answerTier`, `explanationTier`, and `maxAttempts` are included to document the current policy. The app calculates the access checks from difficulty rather than trusting these descriptive fields.
+Each record in `questions.json` requires a unique `id`, `code`, `title`, `description`, `source`, `topics`, `difficulty` (1–7), `prompt`, and `explanation`. Choice questions use `answerMode: "choice"`, exactly five `choices`, and `correctIndex` (A=0 through E=4). Written-response questions use `answerMode: "short"` and an `answerFields` array; each field contains a label, accepted answer strings, and a display answer. The access fields `submissionTier`, `answerTier`, `explanationTier`, and `maxAttempts` document the current policy. The app calculates access checks from difficulty rather than trusting these descriptive fields.
+
+
+## Halloween challenge and dashboard (updated in v0.7)
+
+- The main page contains a small, non-spoiling Easter-egg hint and exactly one interactive pumpkin launcher fixed at the bottom centre of the viewport. Scrolling does not create or reveal a second launcher.
+- Clicking the pumpkin opens a four-star numeric challenge, open to guests, REG accounts, and VIPs. The answer is a number with fewer than four digits.
+- An optional hint gives only the broad range 100–200 and a general prime-exponent direction; it does not state the answer.
+- A correct response awards the Pumpkin Learner commemorative trophy. Guests can later claim the locally stored award by signing into an account in the same browser.
+- Trophy artwork is no longer shown as a separate pumpkin control on the home page. It is shown in the challenge award result and Dashboard → Honors. Asset path: `assets/pumpkin_trophy.png`, recommended 512 × 512 px transparent PNG.
+- Dashboard navigation includes My Problems, Honors, and Rank Rules. Rank rules are visible, but ranked matches and the hidden bank are not playable yet.
+
+
+## AMC 8 2026 adapted — public short-answer questions
+
+- **Q1 — Miguel, Luna, and the Ball** — 3/7 — (a) 1/4; (b) 210 m — Algebra, Rates, Relative Motion, Fractions.
+- **Q2 — Building a 17 mm Coin Stack** — 3/7 — 49 — Combinatorics, Sequences, Recurrence Relations.
+- **Q3 — An Elastic Band Around Seven Coins** — 3/7 — 60 + 10π cm — Geometry, Circles, Perimeter.
+- **Q4 — Even Digits and Divisibility by 8** — 4/7 — 8/25 — Number Theory, Divisibility, Counting, Combinatorics.
+- **Q5 — Writing 360 as Consecutive Odd Sums** — 4/7 — 6 — Number Theory, Sequences, Divisibility, Algebra.
+- **Q6 — Rearranging Five Students** — 5/7 — 14 — Combinatorics, Permutations, Inclusion-Exclusion.
+- **Q7 — The Extreme Median of Seven Group Medians** — 6/7 — minimum 20, maximum 44 — Statistics, Combinatorics, Optimization, Order Statistics.
+
+## Hidden ranked-bank question (not accessible)
+- **Q8 — Counting Factors of 5 in a Factorial Product** — 2/7 — answer 164 — Number Theory, Prime Factorization, Factorials, Valuations.
+- The record is stored outside the public site folder at `../private-developer/hidden-ranked-questions.json` and is deliberately excluded from `questions.json`. The included local `start.bat` server serves only the website folder, not its sibling private folder. Do not upload the private folder to a public site; production use needs server-side private storage.
+
+## AMC 8 2026 adapted answer verification notes
+- Q1: Miguel walks 30 m before meeting Luna, which is 1/4 of 120 m; Luna runs 120 m out and 90 m back, total 210 m.
+- Q2: ordered compositions satisfy f(n)=f(n−2)+f(n−3), yielding f(17)=49.
+- Q3: the outer centres form a regular hexagon of perimeter 60 cm; the offset arcs make one full circumference of radius 5 cm, adding 10π cm.
+- Q4: 40 of 125 possible final-three-digit tuples are divisible by 8, so the fraction is 40/125=8/25.
+- Q5: if there are k terms starting at odd a, 360=k(a+k−1); valid k are 2, 4, 6, 10, 12, 18, giving 6 representations.
+- Q6: inclusion–exclusion over the four forbidden original neighbour pairs gives 120−192+108−24+2=14.
+- Q7: four groups need five entries at or below the target median for the lower bound (20); symmetrically, the 20 largest values 44–63 show the upper bound 44 is attainable.
+- Hidden Q8: v₅(S(40))=Σₖ₌₁⁴⁰⌊k/5⌋+Σₖ₌₁⁴⁰⌊k/25⌋=148+16=164.
+
+## Rank thresholds (display only; ranked play disabled)
+- Black Iron (黑铁): default account rank.
+- Bronze (青铜): 1 star; Silver (白银): 4; Gold (黄金): 8; Platinum (铂金): 12; Diamond (钻石): 18; 神算: 24; 高手: 30.
+- 最强大脑 (Strongest Brain): 50 stars, under development and not obtainable; after release, further stars display as 最强大脑 N 星.
+
+
+## Additional topic index — AMC 8 2026 adapted
+- **Algebra:** AMC 8 2026 Q1, Q5.
+- **Circles / Perimeter / Geometry:** AMC 8 2026 Q3.
+- **Combinatorics:** AMC 8 2026 Q2, Q4, Q6, Q7.
+- **Divisibility / Number Theory:** AMC 8 2026 Q4, Q5.
+- **Factorials / Prime Factorization / Valuations:** Hidden AMC 8 2026 Q8.
+- **Fractions / Relative Motion / Rates:** AMC 8 2026 Q1.
+- **Inclusion–Exclusion / Permutations:** AMC 8 2026 Q6.
+- **Optimization / Order Statistics / Statistics:** AMC 8 2026 Q7.
+- **Recurrence Relations / Sequences:** AMC 8 2026 Q2, Q5.
+
+
+## v1.0 display behavior
+- The reference answer and explanation are not displayed automatically. Each authorized item is revealed only after its own button is clicked.
+- A submitted correct multiple-choice option is green. A submitted incorrect option is red.
+- For users entitled to the answer key, the correct option is also marked green after submission. Without that permission, the correct option remains hidden; only the user's submitted option receives feedback coloring.
+- The library card's `Normal · REG` badge remains in its original position and wording, with a light translucent green background.
